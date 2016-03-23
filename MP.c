@@ -16,13 +16,14 @@ typedef struct{
   char **grid;
 } GridState;
 
-typedef struct Node{
-  int currentHeuristic = 0;
-  int currentCost = 0;
+typedef struct node Node;
+struct node{
+  int currentHeuristic;
+  int currentCost;
   GridState *grid;
   Car *cars;
   Node **children;
-} Node;
+};
 
 void getFile(FILE *fp, int *matrix){
 
