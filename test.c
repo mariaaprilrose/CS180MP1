@@ -122,7 +122,7 @@ void MakeCar(char *carData, int num){
   int temp[4];
 
   for(i = 0; i < 12; i++){
-    if(carData[i]!=32 && carData[i]>0){
+    if(carData[i]!=32 && carData[i]>0 && carData[i]!=10){
       carData[i] = carData[i] - 48;
       // printf("Cardata %d\n", carData[i]);
       temp[j] = carData[i];
