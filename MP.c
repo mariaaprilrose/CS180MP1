@@ -61,8 +61,8 @@ int main () {
     int matrix;
 
     fp = fopen("a.txt", "r");
-    /*getFile(fp, &matrix);
-    printf("\nmatrix limit %d\n", matrix);*/
+    getFile(fp, &matrix);
+    printf("\nmatrix limit %d\n", matrix);
 
     // Initialize Grid // 
 
