@@ -15,20 +15,15 @@ typedef struct{
 
 typedef struct car Car;
 struct car{
-  int data[4];
+  // int data[4];
   // char id[1];
   int id;
   char orientation;
   // char orientation[1];
   int length;
   Coordinates coor;
-  Car **next;
+  Car *next;
 };
-
-typedef struct{
-  char **grid;
-} GridState;
-
 
 typedef struct node Node;
 struct node{
@@ -94,46 +89,56 @@ void printGrid(){
   }
 }
 
-void insertToGrid(Car car){
+void insertToGrid(struct Car *car){
   //store Cars first
   int i,ctr;
   
-  if(car.orientation==104){ //h
-    for(i = car.coor.y,ctr=0;ctr<car.length;i+=1,ctr+=1){
-      arrayField[car.coor.x][i] = 'H';
+  if(car->orientation==104){ //h
+    for(i = car->coor.y,ctr=0;ctr<car->length;i+=1,ctr+=1){
+      arrayField[car->coor.x][i] = 'H';
     }
     //improvement: design of printing car
   }
-  else if(car.orientation==118){
-    for(i = car.coor.x,ctr=0;ctr<car.length;i+=1,ctr+=1){
-      arrayField[i][car.coor.y] = 'V';
+  else if(car->orientation==118){
+    for(i = car->coor.x,ctr=0;ctr<car->length;i+=1,ctr+=1){
+      arrayField[i][car->coor.y] = 'V';
     }
   }
 
 }
 
+Car* initCar(int id, int x, int y, char c, int len){
+  Car* alpha = (Car*)malloc(sizeof(Car));
+  alpha->id = id;
+  alpha->coor.x = x;
+  alpha->coor.y = y;
+  alpha->orientation = c;
+  alpha->length = len;
+}
+
 void MakeCar(char *carData, int num){
-  Car TempCar;
+  Car *TempCar = (Car*)malloc(sizeof(Car));
   int i,j;
   j=0;
-  
+  int temp[4];
+
   for(i = 0; i < 12; i++){
     if(carData[i]!=32 && carData[i]>0){
       carData[i] = carData[i] - 48;
       printf("Cardata %d\n", carData[i]);
-      mainCar.data[j] = carData[i];
+      temp[j] = carData[i];
       j+=1;
     }   
   }
-
-  mainCar.id = num;
-  mainCar.coor.x = mainCar.data[1];
-  mainCar.coor.y = mainCar.data[0];
-  mainCar.data[2] = mainCar.data[2] + 48;
-  // printf("\n Orientation %c \n",(char)mainCar.data[2]);
-  mainCar.orientation = (char) mainCar.data[2];
-  mainCar.length = mainCar.data[3];
-  printf("\n ID:%d X:%d Y:%d Orie:%c Len:%d",mainCar.id,mainCar.coor.x,mainCar.coor.y,mainCar.orientation,mainCar.length);
+  initCar(num,temp[1],temp[0],(char) temp[2],temp[3]);
+  // mainCar.id = num;
+  // mainCar.coor.x = temp[1];
+  // mainCar.coor.y = temp[0];
+  // temp[2] = temp[2] + 48;
+  // // printf("\n Orientation %c \n",(char)temp[2]);
+  // mainCar.orientation = (char) temp[2];
+  // mainCar.length = temp[3];
+  // printf("\n ID:%d X:%d Y:%d Orie:%c Len:%d",mainCar.id,mainCar.coor.x,mainCar.coor.y,mainCar.orientation,mainCar.length);
   
   insertToGrid(mainCar);
 
