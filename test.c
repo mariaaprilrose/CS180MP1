@@ -26,6 +26,8 @@ struct car{
 };
 
 Car mainCar;
+Car *head;
+Car *curr;
 
 typedef struct{
   char **grid;
