@@ -41,7 +41,7 @@ struct node{
 };
 
 
-void initGrid(){
+void initArrayField(){
   int i,j;
   for(i=0;i<matrixSize;i+=1){
     for(j=0;j<matrixSize;j+=1){
@@ -50,7 +50,7 @@ void initGrid(){
   }
 }
 
-void printGrid(){
+void printArrayField(){
   int i,j;
   printf("\n");
   for(i=0;i<matrixSize;i+=1){
@@ -61,7 +61,7 @@ void printGrid(){
   }
 }
 
-void insertToGrid(Car car){
+void insertToArrayField(Car car){
   //store Cars first
   int i,ctr;
   
@@ -84,6 +84,7 @@ void MakeCar(char *carData, int num){
   int i,j;
   j=0;
   
+
   for(i = 0; i < 12; i++){
     if(carData[i]!=32 && carData[i]>0){
       carData[i] = carData[i] - 48;
@@ -103,7 +104,7 @@ void MakeCar(char *carData, int num){
   mainCar.length = mainCar.data[3];
   printf("\n ID:%d X:%d Y:%d Orie:%c Len:%d",mainCar.id,mainCar.coor.x,mainCar.coor.y,mainCar.orientation,mainCar.length);
   
-  insertToGrid(mainCar);
+  insertToArrayField(mainCar);
   TempCar=mainCar;
 
 
@@ -131,8 +132,8 @@ void getFile(FILE *fp){
         exit(EXIT_FAILURE);
   getline(&line, &len, fp);
   matrixSize = line[0]-48;
-  initGrid();
-  printGrid();  
+  initArrayField();
+  printArrayField();  
   //make Goal car
   // getdelim(&line, &len,'\n',fp);
   // MakeCar(line,id_temp);
@@ -171,10 +172,10 @@ int main () {
     getFile(fp);
     printf("\nmatrix limit %d\n", matrixSize);
     printf("\n");
-    printGrid();
+    printArrayField();
     //void aStar()
 
-    // Initialize Grid // 
+    // Initialize ArrayField // 
 
     fclose(fp);
     return 0;
