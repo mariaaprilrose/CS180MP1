@@ -45,10 +45,10 @@ Car *curr;
 /*Functions*/
 void initGrid();
 void printGrid();
-void insertToGrid(struct Car *car);
+void insertToGrid(Car *car);
 void MakeCar(char *carData, int num);
 void getFile(FILE *fp);
-
+void aStar();
 /*Main Functions*/
 int main () {
 
@@ -61,9 +61,7 @@ int main () {
     printf("\nmatrix limit %d\n", matrixSize);
     printf("\n");
     printGrid();
-    //void aStar()
-
-    // Initialize Grid // 
+    aStar();
 
     fclose(fp);
     return 0;
@@ -89,11 +87,12 @@ void printGrid(){
   }
 }
 
-void insertToGrid( struct Car *car){
+void insertToGrid(Car *car){
   //store Cars first
   int i,ctr;
   
   if(car->orientation==104){ //h
+    //printf("horizontal\n");
     for(i = car->coor.y,ctr=0;ctr<car->length;i+=1,ctr+=1){
       arrayField[car->coor.x][i] = 'H';
     }
@@ -131,18 +130,21 @@ void MakeCar(char *carData, int num){
       j+=1;
     }   
   }
+  temp[2] = temp[2] + 48;
 
   TempCar = initCar(num,temp[1],temp[0],(char) temp[2],temp[3]);
-  // mainCar.id = num;
-  // mainCar.coor.x = temp[1];
-  // mainCar.coor.y = temp[0];
-  // temp[2] = temp[2] + 48;
-  // // printf("\n Orientation %c \n",(char)temp[2]);
-  // mainCar.orientation = (char) temp[2];
-  // mainCar.length = temp[3];
-  // printf("\n ID:%d X:%d Y:%d Orie:%c Len:%d",mainCar.id,mainCar.coor.x,mainCar.coor.y,mainCar.orientation,mainCar.length);
+  insertToGrid(TempCar);
+  if(num==1){
+    head = TempCar;
+    head->next = NULL;
+    curr = head;
+  }
+  else{
+    curr->next = TempCar;
+    curr = TempCar;
+    curr->next = NULL;
+  }
   
-  insertToGrid(&TempCar);
 }
 
 /*bool CarCheck(Car car){
@@ -182,7 +184,7 @@ void getFile(FILE *fp){
     }
 
   free(line);
-   
+
   if (feof(fp))
      printf("\n End of file reached.");
   else
@@ -190,6 +192,11 @@ void getFile(FILE *fp){
 }
 
 void aStar(){
+  curr = head;
+  while(curr!=NULL){
+    printf("ID: %d\n",curr->id);
+    curr = curr->next;
+  }
 /*  for(i=0; i<copy_idtemp; i++){
     if (i==mainCar.id)
       CarCheck()
