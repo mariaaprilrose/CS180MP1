@@ -2,16 +2,19 @@
 #include <string.h>
 #define _GNU_SOURCE
 #include <stdlib.h>
+#include <stdbool.h>
 
 int matrixSize;
 char arrayField[10][10];
+int copy_idtemp;
 
 typedef struct{
   int x;
   int y;
 } Coordinates;
 
-typedef struct{
+typedef struct car Car;
+struct car{
   int data[4];
   // char id[1];
   int id;
@@ -19,7 +22,10 @@ typedef struct{
   // char orientation[1];
   int length;
   Coordinates coor;
-} Car;
+  Car *next;
+};
+
+Car mainCar;
 
 typedef struct{
   char **grid;
@@ -33,6 +39,7 @@ struct node{
   Car *cars;
   Node **children;
 };
+
 
 void initGrid(){
   int i,j;
@@ -72,10 +79,11 @@ void insertToGrid(Car car){
 
 }
 
-void makeMainCar(char *carData, int num){
+void MakeCar(char *carData, int num){
+  Car TempCar;
   int i,j;
   j=0;
-  Car mainCar;
+  
   for(i = 0; i < 12; i++){
     if(carData[i]!=32 && carData[i]>0){
       carData[i] = carData[i] - 48;
@@ -84,6 +92,7 @@ void makeMainCar(char *carData, int num){
       j+=1;
     }   
   }
+
 
   mainCar.id = num;
   mainCar.coor.x = mainCar.data[1];
@@ -95,30 +104,23 @@ void makeMainCar(char *carData, int num){
   printf("\n ID:%d X:%d Y:%d Orie:%c Len:%d",mainCar.id,mainCar.coor.x,mainCar.coor.y,mainCar.orientation,mainCar.length);
   
   insertToGrid(mainCar);
+  TempCar=mainCar;
+
 
 }
 
+/*bool CarCheck(Car car){
+  int x = 1;
+  if(car.coor.x >= matrixSize || car.coor.y >=matrixSize)
+    x = 2;
+
+  if(x==1)
+    return true;
+  else
+    return false; 
+}*/
+
 void getFile(FILE *fp){
-
-  // int ch = getc(fp);
-  // char c;
-  // ch = ch - 48;
-  // *matrix = ch;
-  // do {
-  //   ch = getc(fp);
-  //   /// for new lines
-  //   if (ch == 10){
-  //       ch = getc(fp);
-  //       printf("\n");
-  //   }
-
-  //   /// for spaces == 32, for EOF <-1
-  //   if (ch != 32 && ch > 0){ 
-  //       ch = ch - 48;
-
-  //       printf(" %d  ", ch );
-  //   }    
-  // } while (ch != EOF); 
 
   char *line = NULL;
   size_t len = 0;
@@ -133,13 +135,14 @@ void getFile(FILE *fp){
   printGrid();  
   //make Goal car
   // getdelim(&line, &len,'\n',fp);
-  // makeMainCar(line,id_temp);
+  // MakeCar(line,id_temp);
 
   while ((read = getline(&line, &len, fp)) != -1) {
-        printf("Retrieved line of length %zu :\n", read);
-        makeMainCar(line,id_temp);
-        printf("%s", line);
+        //printf("Retrieved line of length %zu :\n", read);
+        MakeCar(line,id_temp);
+        //printf("%s", line);
         id_temp+=1;
+        copy_idtemp = id_temp;
     }
 
   free(line);
@@ -150,8 +153,12 @@ void getFile(FILE *fp){
      printf("\n Something went wrong.");
 }
 
-void printMatrix(){
-
+void aStar(){
+/*  for(i=0; i<copy_idtemp; i++){
+    if (i==mainCar.id)
+      CarCheck()
+  }*/
+  
 }
 
 int main () {
@@ -165,6 +172,7 @@ int main () {
     printf("\nmatrix limit %d\n", matrixSize);
     printf("\n");
     printGrid();
+    //void aStar()
 
     // Initialize Grid // 
 
