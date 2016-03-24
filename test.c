@@ -38,14 +38,14 @@ struct node{
 int matrixSize;
 char arrayField[10][10];
 int copy_idtemp;
-Car mainCar;
+Car *TempCar;
 Car *head;
 Car *curr;
 
 /*Functions*/
 void initGrid();
 void printGrid();
-void insertToGrid(Car car);
+void insertToGrid(struct Car *car);
 void MakeCar(char *carData, int num);
 void getFile(FILE *fp);
 
@@ -89,7 +89,7 @@ void printGrid(){
   }
 }
 
-void insertToGrid(struct Car *car){
+void insertToGrid( struct Car *car){
   //store Cars first
   int i,ctr;
   
@@ -117,7 +117,7 @@ Car* initCar(int id, int x, int y, char c, int len){
 }
 
 void MakeCar(char *carData, int num){
-  Car *TempCar = (Car*)malloc(sizeof(Car));
+  
   int i,j;
   j=0;
   int temp[4];
@@ -125,12 +125,14 @@ void MakeCar(char *carData, int num){
   for(i = 0; i < 12; i++){
     if(carData[i]!=32 && carData[i]>0){
       carData[i] = carData[i] - 48;
-      printf("Cardata %d\n", carData[i]);
+      // printf("Cardata %d\n", carData[i]);
       temp[j] = carData[i];
+      printf("Temp %d\n", temp[j]);
       j+=1;
     }   
   }
-  initCar(num,temp[1],temp[0],(char) temp[2],temp[3]);
+
+  TempCar = initCar(num,temp[1],temp[0],(char) temp[2],temp[3]);
   // mainCar.id = num;
   // mainCar.coor.x = temp[1];
   // mainCar.coor.y = temp[0];
@@ -140,8 +142,7 @@ void MakeCar(char *carData, int num){
   // mainCar.length = temp[3];
   // printf("\n ID:%d X:%d Y:%d Orie:%c Len:%d",mainCar.id,mainCar.coor.x,mainCar.coor.y,mainCar.orientation,mainCar.length);
   
-  insertToGrid(mainCar);
-
+  insertToGrid(&TempCar);
 }
 
 /*bool CarCheck(Car car){
