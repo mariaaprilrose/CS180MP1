@@ -20,7 +20,7 @@ struct gridstate{
   int currentHeuristic;
   int currentCost;
 };
-GridState *head;
+GridState *state_head;
 
 typedef struct car Car;
 struct car{
@@ -54,7 +54,7 @@ void printGrid();
 void insertToGrid(Car *car);
 void MakeCar(char *carData, int num);
 void getFile(FILE *fp);
-int CoorComp(int x, int y, int x2, int y2);
+int CoorComp(int x, int y, int coor1, int size1, int x2, int y2, int coor2, int size2);
 bool CarCheck(int startx, int starty, int orientation, int size);
 int CarUp(Car *car);
 int CarDown(Car *car);
@@ -186,7 +186,7 @@ void getFile(FILE *fp){
      printf("\n Something went wrong.");
 }
 
-int CoorComp(int x, int y, int x2, int y2){
+int CoorComp(int x, int y, int coor1, int size1, int x2, int y2, int coor2, int size2){
   if (x==x2 || y==y2)
     return 2;
   return 1;
@@ -218,12 +218,12 @@ bool CarCheck(int startx, int starty, int orientation, int size){
 
   //checks if new movement will collide with other bodies
   curr2 = head;
-  while(curr2!= NULL){
+  while(curr2->next->next!= NULL){
     //so it doesn't check with itself
     if (curr1 == curr2)
       curr2=curr2->next;
     //check = CoorComp(x,y, orientation, size, curr2->coor.x, curr2->coor.y, curr2->orientation, curr2->size)
-    check=CoorComp(2,3,104, 2, 3,1,118,3);
+    check=CoorComp(2,3,104, 2, 2,1,118,3);
     printf("curr1%d, curr2%d\n",curr1->id, curr2->id );
     curr2=curr2->next;
   }
