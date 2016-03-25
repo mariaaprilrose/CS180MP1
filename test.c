@@ -3,15 +3,15 @@
 #define _GNU_SOURCE
 #include <stdlib.h>
 #include <stdbool.h>
-
-int matrixSize;
-char arrayField[10][10];
-int copy_idtemp;
-
+/*All Structures*/
 typedef struct{
   int x;
   int y;
 } Coordinates;
+
+typedef struct{
+  char **grid;
+} GridState;
 
 typedef struct car Car;
 struct car{
@@ -22,14 +22,8 @@ struct car{
   // char orientation[1];
   int length;
   Coordinates coor;
-  Car *next;
+  Car **next;
 };
-
-Car mainCar;
-
-typedef struct{
-  char **grid;
-} GridState;
 
 typedef struct node Node;
 struct node{
@@ -40,8 +34,40 @@ struct node{
   Node **children;
 };
 
+/*Global Vasiables*/
+int matrixSize;
+char arrayField[10][10];
+int copy_idtemp;
+Car mainCar;
 
-void initArrayField(){
+/*Functions*/
+void initGrid();
+void printGrid();
+void insertToGrid(Car car);
+void MakeCar(char *carData, int num);
+void getFile(FILE *fp);
+
+/*Main Functions*/
+int main () {
+
+    FILE *fp;
+    int field[100][100];
+    char buff[255];
+    
+    fp = fopen("a.txt", "r");
+    getFile(fp);
+    printf("\nmatrix limit %d\n", matrixSize);
+    printf("\n");
+    printGrid();
+    //void aStar()
+
+    // Initialize Grid // 
+
+    fclose(fp);
+    return 0;
+}
+
+void initGrid(){
   int i,j;
   for(i=0;i<matrixSize;i+=1){
     for(j=0;j<matrixSize;j+=1){
@@ -50,7 +76,7 @@ void initArrayField(){
   }
 }
 
-void printArrayField(){
+void printGrid(){
   int i,j;
   printf("\n");
   for(i=0;i<matrixSize;i+=1){
@@ -61,7 +87,7 @@ void printArrayField(){
   }
 }
 
-void insertToArrayField(Car car){
+void insertToGrid(Car car){
   //store Cars first
   int i,ctr;
   
@@ -84,7 +110,6 @@ void MakeCar(char *carData, int num){
   int i,j;
   j=0;
   
-
   for(i = 0; i < 12; i++){
     if(carData[i]!=32 && carData[i]>0){
       carData[i] = carData[i] - 48;
@@ -93,7 +118,6 @@ void MakeCar(char *carData, int num){
       j+=1;
     }   
   }
-
 
   mainCar.id = num;
   mainCar.coor.x = mainCar.data[1];
@@ -104,9 +128,7 @@ void MakeCar(char *carData, int num){
   mainCar.length = mainCar.data[3];
   printf("\n ID:%d X:%d Y:%d Orie:%c Len:%d",mainCar.id,mainCar.coor.x,mainCar.coor.y,mainCar.orientation,mainCar.length);
   
-  insertToArrayField(mainCar);
-  TempCar=mainCar;
-
+  insertToGrid(mainCar);
 
 }
 
@@ -132,8 +154,8 @@ void getFile(FILE *fp){
         exit(EXIT_FAILURE);
   getline(&line, &len, fp);
   matrixSize = line[0]-48;
-  initArrayField();
-  printArrayField();  
+  initGrid();
+  printGrid();  
   //make Goal car
   // getdelim(&line, &len,'\n',fp);
   // MakeCar(line,id_temp);
@@ -160,23 +182,4 @@ void aStar(){
       CarCheck()
   }*/
   
-}
-
-int main () {
-
-    FILE *fp;
-    int field[100][100];
-    char buff[255];
-    
-    fp = fopen("a.txt", "r");
-    getFile(fp);
-    printf("\nmatrix limit %d\n", matrixSize);
-    printf("\n");
-    printArrayField();
-    //void aStar()
-
-    // Initialize ArrayField // 
-
-    fclose(fp);
-    return 0;
 }
