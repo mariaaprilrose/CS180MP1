@@ -40,7 +40,8 @@ char arrayField[10][10];
 int copy_idtemp;
 Car *TempCar;
 Car *head;
-Car *curr;
+Car *curr1;
+Car *curr2;
 
 /*Functions*/
 void initGrid();
@@ -48,6 +49,11 @@ void printGrid();
 void insertToGrid(Car *car);
 void MakeCar(char *carData, int num);
 void getFile(FILE *fp);
+bool CarCheck(int startx, int starty, int orientation, int size);
+int CarUp(Car *car);
+int CarDown(Car *car);
+int CarLeft(Car *car);
+int CarRight(Car *car);
 void aStar();
 /*Main Functions*/
 int main () {
@@ -126,7 +132,7 @@ void MakeCar(char *carData, int num){
       carData[i] = carData[i] - 48;
       // printf("Cardata %d\n", carData[i]);
       temp[j] = carData[i];
-      printf("Temp %d\n", temp[j]);
+      //printf("Temp %d\n", temp[j]);
       j+=1;
     }   
   }
@@ -137,26 +143,15 @@ void MakeCar(char *carData, int num){
   if(num==1){
     head = TempCar;
     head->next = NULL;
-    curr = head;
+    curr1 = head;
   }
   else{
-    curr->next = TempCar;
-    curr = TempCar;
-    curr->next = NULL;
+    curr1->next = TempCar;
+    curr1 = TempCar;
+    curr1->next = NULL;
   }
   
 }
-
-/*bool CarCheck(Car car){
-  int x = 1;
-  if(car.coor.x >= matrixSize || car.coor.y >=matrixSize)
-    x = 2;
-
-  if(x==1)
-    return true;
-  else
-    return false; 
-}*/
 
 void getFile(FILE *fp){
 
@@ -191,15 +186,66 @@ void getFile(FILE *fp){
      printf("\n Something went wrong.");
 }
 
-void aStar(){
-  curr = head;
-  while(curr!=NULL){
-    printf("ID: %d\n",curr->id);
-    curr = curr->next;
-  }
-/*  for(i=0; i<copy_idtemp; i++){
-    if (i==mainCar.id)
-      CarCheck()
-  }*/
+bool CarCheck(int startx, int starty, int orientation, int size){
+  int check = 1;
+  int endx,endy;
+
+  //checks if value of head belongs to range of matrix
+  if(startx >= matrixSize || starty >=matrixSize || startx <  0 || starty <0)
+    check = 2;
+
+  //checks end of car orientation for horizontal
+  if (orientation==104){
+    endx= startx + size;
+    if(endx >= matrixSize || endx < 0)
+      check = 2;
+      
+  }      
   
+
+  //checks end of car orientation for vertical
+  if (orientation=118){
+    endy= starty + size;
+    if(endy>= matrixSize || endy < 0)
+      check = 2;
+  }    
+
+  printf("check: %d\n", check);
+  if(check!=1)
+    return false;
+  return true; 
+  
+}
+
+int CarUp(Car *car){
+  int copy = car->coor.y;
+  copy++;
+  return 1;
+}
+int CarDown(Car *car){
+  int copy = car->coor.y;
+  copy++;
+  return 1;
+}
+int CarLeft(Car *car){
+  int copy = car->coor.x;
+  copy++;
+  return 1;
+}
+int CarRight(Car *car){
+  int copy = car->coor.x;
+  copy++;
+  return 1;
+}
+
+void aStar(){
+  curr1 = head;
+  //while(curr1!=NULL){
+    //printf("ID: %d\n",curr->id);
+    if (CarCheck(2,3,104,2) == true)
+      printf("TRUE\n");
+    else
+      printf("False\n");
+  //  curr1 = curr1->next;
+ // }
 }
