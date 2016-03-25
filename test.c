@@ -25,11 +25,6 @@ struct car{
   Car **next;
 };
 
-
-Car mainCar;
-Car *head;
-Car *curr;
-
 typedef struct{
   char **grid;
 } GridState;
@@ -49,6 +44,8 @@ int matrixSize;
 char arrayField[10][10];
 int copy_idtemp;
 Car mainCar;
+Car *head;
+Car *curr;
 
 /*Functions*/
 void initGrid();
