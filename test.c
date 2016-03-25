@@ -210,6 +210,16 @@ bool CarCheck(int startx, int starty, int orientation, int size){
       check = 2;
   }    
 
+  //checks if new movement will collide with other bodies
+  curr2 = head;
+  while(curr2!= NULL){
+    //so it doesn't check with itself
+
+    if (curr1 == curr2)
+      curr2=curr2->next;
+    printf("curr1%d, curr2%d\n",curr1->id, curr2->id );
+    curr2=curr2->next;
+  }
   printf("check: %d\n", check);
   if(check!=1)
     return false;
@@ -240,12 +250,11 @@ int CarRight(Car *car){
 
 void aStar(){
   curr1 = head;
-  //while(curr1!=NULL){
-    //printf("ID: %d\n",curr->id);
+  while(curr1!=NULL){
     if (CarCheck(2,3,104,2) == true)
       printf("TRUE\n");
     else
       printf("False\n");
-  //  curr1 = curr1->next;
- // }
+    curr1 = curr1->next;
+  }
 }
