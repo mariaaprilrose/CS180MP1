@@ -113,8 +113,29 @@ void getFile(FILE *fp){
 }
 
 int CoorComp(int x, int y, int coor1, int size1, int x2, int y2, int coor2, int size2){
-  if (x==x2 || y==y2)
-    return 2;
+  int i,j, copy_x=x,copy_y=y,copy_x2=x2,copy_y2=y2;
+  for(i=0; i<size1; i++){
+    if (coor1 == 104){
+      x=copy_x;
+      x=x+i;
+    }
+    else if(coor1==118){
+      y=copy_y;
+      y=y+i;
+    }
+    for(j=0; j<size2; j++){
+      if (coor1 == 104){
+        x2=copy_x2;
+        x2=x2+j;
+      }
+      else if(coor1==118){
+        y2=copy_y2;
+        y2=y2+j;
+      }
+      if (x==x2 || y==y2)
+        return 2;
+    }
+  }
   return 1;
 }
 
@@ -128,7 +149,7 @@ bool CarCheck(int startx, int starty, int orientation, int size){
 
   //checks end of car orientation for horizontal
   if (orientation==104){
-    endx= startx + size;
+    endx= startx + (size-1);
     if(endx >= matrixSize || endx < 0)
       check = 2;
       
@@ -137,19 +158,21 @@ bool CarCheck(int startx, int starty, int orientation, int size){
 
   //checks end of car orientation for vertical
   if (orientation=118){
-    endy= starty + size;
+    endy= starty + (size-1);
     if(endy>= matrixSize || endy < 0)
       check = 2;
   }    
 
   //checks if new movement will collide with other bodies
   curr2 = head;
-  while(curr2->next->next!= NULL){
+  while(curr2!= NULL){
     //so it doesn't check with itself
     if (curr1 == curr2)
       curr2=curr2->next;
+    if (curr2 ==NULL)
+      break;
     //check = CoorComp(x,y, orientation, size, curr2->coor.x, curr2->coor.y, curr2->orientation, curr2->size)
-    check=CoorComp(2,3,104, 2, 2,1,118,3);
+    check=CoorComp(0,3,104, 2, 3,1,118,3);
     printf("curr1%d, curr2%d\n",curr1->id, curr2->id );
     curr2=curr2->next;
   }
