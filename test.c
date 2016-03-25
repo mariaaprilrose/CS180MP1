@@ -3,23 +3,29 @@
 #define _GNU_SOURCE
 #include <stdlib.h>
 #include <stdbool.h>
+
 /*All Structures*/
 typedef struct{
   int x;
   int y;
 } Coordinates;
 
-typedef struct{
-  char **grid;
-} GridState;
+typedef struct gridstate GridState;
+struct gridstate{
+  //char **state;
+  //GridState *state;
+  GridState *next;
+  GridState *prev;
+  int height;
+  int currentHeuristic;
+  int currentCost;
+};
+GridState *head;
 
 typedef struct car Car;
 struct car{
-  // int data[4];
-  // char id[1];
   int id;
   char orientation;
-  // char orientation[1];
   int length;
   Coordinates coor;
   Car *next;
@@ -29,7 +35,6 @@ typedef struct node Node;
 struct node{
   int currentHeuristic;
   int currentCost;
-  GridState *grid;
   Car *cars;
   Node **children;
 };
@@ -55,6 +60,7 @@ int CarDown(Car *car);
 int CarLeft(Car *car);
 int CarRight(Car *car);
 void aStar();
+
 /*Main Functions*/
 int main () {
 
@@ -98,11 +104,9 @@ void insertToGrid(Car *car){
   int i,ctr;
   
   if(car->orientation==104){ //h
-    //printf("horizontal\n");
     for(i = car->coor.y,ctr=0;ctr<car->length;i+=1,ctr+=1){
       arrayField[car->coor.x][i] = 'H';
     }
-    //improvement: design of printing car
   }
   else if(car->orientation==118){
     for(i = car->coor.x,ctr=0;ctr<car->length;i+=1,ctr+=1){
@@ -166,14 +170,9 @@ void getFile(FILE *fp){
   matrixSize = line[0]-48;
   initGrid();
   printGrid();  
-  //make Goal car
-  // getdelim(&line, &len,'\n',fp);
-  // MakeCar(line,id_temp);
 
   while ((read = getline(&line, &len, fp)) != -1) {
-        //printf("Retrieved line of length %zu :\n", read);
         MakeCar(line,id_temp);
-        //printf("%s", line);
         id_temp+=1;
         copy_idtemp = id_temp;
     }
