@@ -25,6 +25,16 @@ struct car{
   Car **next;
 };
 
+
+Car mainCar;
+Car *head;
+Car *curr;
+
+typedef struct{
+  char **grid;
+} GridState;
+
+
 typedef struct node Node;
 struct node{
   int currentHeuristic;
