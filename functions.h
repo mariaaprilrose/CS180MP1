@@ -1,4 +1,4 @@
-/*All Structures*/
+/*All Structures, Global Variables, Function Decalarations*/
 
 typedef struct{
   int x;
@@ -9,8 +9,8 @@ typedef struct gridstate GridState;
 struct gridstate{
   //char **state;
   //GridState *state;
-  GridState *next;
-  GridState *prev;
+  GridState *parent;
+  GridState **children;
   int height;
   int currentHeuristic;
   int currentCost;

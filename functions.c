@@ -5,6 +5,23 @@
 #include <stdbool.h>
 #include "functions.h"
 
+int zeroHeuristic(){
+  return 0;
+}
+
+int blockHeuristic(){
+  int carsBlocking = 1;
+  carsBlocking+=1;
+  return carsBlocking;
+}
+
+int advanceHeuristic(){
+  
+}
+
+int cost(){
+  
+}
 
 void initGrid(){
   int i,j;
