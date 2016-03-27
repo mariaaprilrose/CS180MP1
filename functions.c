@@ -186,31 +186,68 @@ bool CarCheck(int startx, int starty, int orientation, int size){
 int CarUp(Car *car){
   int copy = car->coor.y;
   copy++;
-  return 1;
+
+  if(CarCheck(car->coor.x, copy, car->orientation, car->length) == true){
+    printf("TRUE\n");
+    return 1;
+  }
+  else{
+    printf("FALSE\n");
+    return 0;
+  }
 }
+
 int CarDown(Car *car){
   int copy = car->coor.y;
-  copy++;
-  return 1;
+  copy--;
+
+  if(CarCheck(car->coor.x, copy, car->orientation, car->length) == true){
+    printf("TRUE\n");
+    return 1;
+  }
+  else{
+    printf("FALSE\n");
+    return 0;
+  }
 }
 int CarLeft(Car *car){
   int copy = car->coor.x;
-  copy++;
-  return 1;
+  copy--;
+
+  if(CarCheck(copy, car->coor.y, car->orientation, car->length) == true){
+    printf("TRUE\n");
+    return 1;
+  }
+  else{
+    printf("FALSE\n");
+    return 0;
+  }
 }
 int CarRight(Car *car){
   int copy = car->coor.x;
   copy++;
-  return 1;
+  if(CarCheck(copy, car->coor.y, car->orientation, car->length) == true){
+    printf("TRUE\n");
+    return 1;
+  }
+  else{
+    printf("FALSE\n");
+    return 0;
+  }
 }
 
 void aStar(){
   curr1 = head;
-  while(curr1!=NULL){
-    if (CarCheck(2,3,104,2) == true)
-      printf("TRUE\n");
-    else
-      printf("False\n");
-    curr1 = curr1->next;
-  }
+  int ifmove;
+  //returns 1 to ifmove if move is possible; no storing of new values yet
+  ifmove= CarUp(curr1);
+
+
+  //while(curr1!=NULL){
+  //  if (CarCheck(2,3,104,2) == true)
+    //  printf("TRUE\n");
+  //  else
+    //  printf("False\n");
+  //  curr1 = curr1->next;
+  //}
 }
