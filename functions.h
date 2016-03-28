@@ -47,6 +47,9 @@ Car *curr1;
 Car *curr2;
 Node *tempNode;
 
+Node *n_head;
+Node *n_curr;
+
 /*Functions*/
 void initGrid();
 void printGrid();
@@ -55,11 +58,11 @@ void MakeCar(char *carData, int num);
 void getFile(FILE *fp);
 void createCarArray(Car* carList);
 int CoorComp(int x, int y, int coor1, int size1, int x2, int y2, int coor2, int size2);
-bool CarCheck(int startx, int starty, int orientation, int size);
-int CarUp(Car *car);
-int CarDown(Car *car);
-int CarLeft(Car *car);
-int CarRight(Car *car);
-int CopyArray(char array1[], char array2[]);
-void aStar();
+bool CarCheck(int startx, int starty, Car carArray[], int car);
+int CarUp(Car carArray[], int car);
+int CarDown(Car carArray[], int car);
+int CarLeft(Car carArray[], int car);
+int CarRight(Car carArray[], int car);
+void CopyArray(char array1[], char array2[]);
+void aStar(Node *node);
 void BFS();

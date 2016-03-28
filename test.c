@@ -38,7 +38,13 @@ int main () {
     printf("\nmatrix limit %d\n", matrixSize);
     printf("\n");
     printGrid();
-    aStar();
+//////////////ASTAR SEARCH
+
+    n_head= headNode;
+    n_curr= n_head;
+    aStar(n_curr);
+
+
     // trial of CopyArray
     char array1[100], array2[100];
     array1[0]= 'a';
@@ -49,8 +55,8 @@ int main () {
     array1[5]= 'h';
     array1[6]= 'i';
     array1[7]= 'l';
-    CopyArray(array1,array2);
-    printf("%s\n", array2);
+    //CopyArray(array1,array2);
+    //printf("%s\n", array2);
     fclose(fp);
     return 0;
 }
