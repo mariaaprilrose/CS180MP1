@@ -107,6 +107,7 @@ void getFile(FILE *fp){
   size_t len = 0;
   ssize_t read;
   int id_temp = 1;
+  int i;
 
   if (fp == NULL)
         exit(EXIT_FAILURE);
@@ -120,13 +121,24 @@ void getFile(FILE *fp){
         id_temp+=1;
         copy_idtemp = id_temp;
     }
-
+    numberOfCars = id_temp-1;
   free(line);
 
   if (feof(fp))
      printf("\n End of file reached.");
   else
      printf("\n Something went wrong.");
+
+}
+
+void createCarArray(Car* carList){
+  int i;
+  curr1 = head; 
+  for(i=0;i<matrixSize;i+=1){
+    carList[i] = *curr1;
+    printf("Create Car Array fxn %d\n",carList[i].id);
+    curr1 = curr1->next;
+  }
 }
 
 int CoorComp(int x, int y, int coor1, int size1, int x2, int y2, int coor2, int size2){
@@ -265,15 +277,34 @@ int CopyArray(char array1[], char array2[]){
   }
 }
 
-GridState* initState(int h, int heur, int c){
-  GridState* alpha = (GridState*)malloc(sizeof(GridState));
+void BFS(){
+  int i;
+  for(i=0;i<numberOfCars;i++){
+
+  }
+}
+
+Node* initState(int lvl, int heur, int cost, Node *par, Node **child, int id, int x, int y){
+  Node* state = (Node*)malloc(sizeof(Node));
+  state->parent = par;
+  state->children = child;
+  state->level = lvl;
+  state->currHeuristic = heur;
+  state->currCost = cost;
+  //Node->carArray = (Node*)malloc
 }
 
 void aStar(){
   curr1 = head;
   
   //returns 1 to ifmove if move is possible; no storing of new values yet
-  if(CarUp(curr1) == 1){
-    printf("UP");
-}
+  //make root node
+  //stempNode = initState(0,0,0,NULL,NULL,);
+  // while(){ //while 
+  //   if(CarUp(curr1) == 1){
+  //     printf("UP");
+  //     //tempNode = initState()
+  //   }
+  // }
 
+}

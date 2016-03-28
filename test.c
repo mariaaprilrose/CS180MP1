@@ -13,9 +13,28 @@ int main () {
     FILE *fp;
     int field[100][100];
     char buff[255];
-    
+    int i;
+
     fp = fopen("a.txt", "r");
     getFile(fp);
+    Car carList[numberOfCars];
+
+    Node *headNode = (Node*)malloc(sizeof(Node));
+    headNode->parent = NULL;
+    headNode->children = NULL;
+    headNode->level=0;
+    headNode->currHeuristic=0;//get heuristic here
+    headNode->currCost=0;
+    headNode->carArray = carList;
+    createCarArray(headNode->carArray);
+    printf("\n");
+    for(i=0;i<matrixSize;i++){
+      printf("CAR ARRAY %d\n", headNode->carArray[i].id);
+    }
+    
+    if(i==matrixSize){
+      Car newCarArray = 
+    }
     printf("\nmatrix limit %d\n", matrixSize);
     printf("\n");
     printGrid();
