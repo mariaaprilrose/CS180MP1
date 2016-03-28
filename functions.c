@@ -240,6 +240,7 @@ int CarLeft(Car *car){
     return 0;
   }
 }
+
 int CarRight(Car *car){
   int copy = car->coor.x;
   copy++;
@@ -253,18 +254,24 @@ int CarRight(Car *car){
   }
 }
 
+int CopyArray(char array1[], char array2[]){
+  int i;
+ // printf("%s\n", array1);
+//  printf("%ld\n", sizeof(array1)/sizeof(int));
+  for(i=0; i<=(sizeof(array1)/sizeof(array1[0])); i++){
+    printf("%c\n", array1[i]);
+    array2[i]= array1[i];
+  }
+
+
+
+}
+
 void aStar(){
   curr1 = head;
   int ifmove;
   //returns 1 to ifmove if move is possible; no storing of new values yet
   ifmove= CarUp(curr1);
 
-
-  //while(curr1!=NULL){
-  //  if (CarCheck(2,3,104,2) == true)
-    //  printf("TRUE\n");
-  //  else
-    //  printf("False\n");
-  //  curr1 = curr1->next;
-  //}
 }
+

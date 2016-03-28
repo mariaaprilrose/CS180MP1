@@ -55,4 +55,5 @@ int CarUp(Car *car);
 int CarDown(Car *car);
 int CarLeft(Car *car);
 int CarRight(Car *car);
+int CopyArray(char array1[], char array2[]);
 void aStar();
