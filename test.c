@@ -29,12 +29,12 @@ int main () {
     createCarArray(headNode->carArray);
     printf("\n");
     for(i=0;i<matrixSize;i++){
-      printf("CAR ARRAY %d\n", headNode->carArray[i].id);
+      printf("CAR ARRAY ID #%d (%d,%d)\n", headNode->carArray[i].id,headNode->carArray[i].coor.x,headNode->carArray[i].coor.y);
     }
     
-    if(i==matrixSize){
-      Car newCarArray = 
-    }
+    // if(i==matrixSize){
+    //   Car newCarArray = 
+    // }
     printf("\nmatrix limit %d\n", matrixSize);
     printf("\n");
     printGrid();

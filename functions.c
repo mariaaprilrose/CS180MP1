@@ -277,26 +277,87 @@ int CopyArray(char array1[], char array2[]){
   }
 }
 
-void BFS(){
-  int i;
-  for(i=0;i<numberOfCars;i++){
-
-  }
-}
-
-Node* initState(int lvl, int heur, int cost, Node *par, Node **child, int id, int x, int y){
-  Node* state = (Node*)malloc(sizeof(Node));
-  state->parent = par;
-  state->children = child;
+Node* initState(Node* state,int lvl, int heur, int cost, int id, int x, int y){
+  // state->parent = par;
+  // state->children = child;
   state->level = lvl;
   state->currHeuristic = heur;
   state->currCost = cost;
+  return state;
   //Node->carArray = (Node*)malloc
+}
+
+void insertToQueue(node *pointer, int data){//EDIT: this is copy pasted from internet
+
+        /* Iterate through the list till we encounter the last node.*/
+        while(pointer->next!=NULL)
+        {
+                pointer = pointer -> next;
+        }
+        /* Allocate memory for the new node and put data in it.*/
+        pointer->next = (node *)malloc(sizeof(node));
+        (pointer->next)->prev = pointer;
+        pointer = pointer->next;
+        pointer->data = data;
+        pointer->next = NULL;
+}
+
+void delete(node *pointer, int data){//EDIT: this is copy pasted from internet
+  
+        /* Go to the node for which the node next to it has to be deleted */
+        while(pointer->next!=NULL && (pointer->next)->data != data)
+        {
+                pointer = pointer -> next;
+        }
+        if(pointer->next==NULL)
+        {
+                printf("Element %d is not present in the list\n",data);
+                return;
+        }
+        /* Now pointer points to a node and the node next to it has to be removed */
+        node *temp;
+        temp = pointer -> next;
+        /*temp points to the node which has to be removed*/
+        pointer->next = temp->next;
+        temp->prev =  pointer;
+        /*We removed the node which is next to the pointer (which is also temp) */
+        free(temp);
+        /* Beacuse we deleted the node, we no longer require the memory used for it . 
+           free() will deallocate the memory.
+         */
+        return;
+}
+
+
+void BFS(Node currNode, queue){// make queue
+  int i,j;
+  currNode = popQueue(queue);//make pop function
+  for(i=0;i<numberOfCars;i++){
+
+    if(currNode->orientation==118){//vertical
+      if(CarUp(currNode->carArray[i],i)==1){
+        Car* currNode->newCarArray = (Car*)malloc(sizeof(Car));
+        for(j=0;j<numberOfCars;j++){
+          currNode->newCarArray[i] = currNode->carArray[i];
+        }
+        moveUp(currNode->newCarArray[i],i);//make moveUp(carArray,index)
+        Node* newNode = (Node*)malloc(sizeof(Node));
+        newNode->carArray = currNode->newCarArray;
+        initState(newNode);
+        //newNode->parent = currNode; 
+        //newNode->children = 
+        insertQueue(newNode);
+      }
+
+    }
+
+  }
+
 }
 
 void aStar(){
   curr1 = head;
-  
+
   //returns 1 to ifmove if move is possible; no storing of new values yet
   //make root node
   //stempNode = initState(0,0,0,NULL,NULL,);
