@@ -253,12 +253,19 @@ int CarRight(Car *car){
   }
 }
 
+GridState* initState(int h, int heur, int c){
+  GridState* alpha = (GridState*)malloc(sizeof(GridState));
+  
+}
+
 void aStar(){
   curr1 = head;
-  int ifmove;
+  
   //returns 1 to ifmove if move is possible; no storing of new values yet
-  ifmove= CarUp(curr1);
+  if(CarUp(curr1) == 1){
+    printf("UP");
 
+  }
 
   //while(curr1!=NULL){
   //  if (CarCheck(2,3,104,2) == true)
