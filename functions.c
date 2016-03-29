@@ -145,21 +145,21 @@ int CoorComp(int x, int y, int coor1, int size1, int x2, int y2, int coor2, int 
   int i,j, copy_x=x,copy_y=y,copy_x2=x2,copy_y2=y2;
   for(i=0; i<size1; i++){
     if (coor1 == 104){
-      x=copy_x;
-      x=x+i;
-    }
-    else if(coor1==118){
       y=copy_y;
       y=y+i;
     }
+    else if(coor1==118){
+      x=copy_x;
+      x=x+i;
+    }
     for(j=0; j<size2; j++){
       if (coor1 == 104){
-        x2=copy_x2;
-        x2=x2+j;
-      }
-      else if(coor1==118){
         y2=copy_y2;
         y2=y2+j;
+      }
+      else if(coor1==118){
+        x2=copy_x2;
+        x2=x2+j;
       }
       if (x==x2 || y==y2)
         return 2;
@@ -168,10 +168,11 @@ int CoorComp(int x, int y, int coor1, int size1, int x2, int y2, int coor2, int 
   return 1;
 }
 
-bool CarCheck(int startx, int starty, int orientation, int size){
-  int check = 1;
-  int endx,endy;
+bool CarCheck(int startx, int starty, Car carArray[], int car){
+  int check = 1, i;
+  int endx,endy, orientation=carArray[car].orientation,  size=carArray[car].length; 
 
+//  printf("Start %d %d %d %d\n", startx, starty, orientation, size );
   //checks if value of head belongs to range of matrix
   if(startx >= matrixSize || starty >=matrixSize || startx <  0 || starty <0)
     check = 2;
@@ -184,7 +185,6 @@ bool CarCheck(int startx, int starty, int orientation, int size){
       
   }      
   
-
   //checks end of car orientation for vertical
   if (orientation=118){
     endy= starty + (size-1);
@@ -193,7 +193,7 @@ bool CarCheck(int startx, int starty, int orientation, int size){
   }    
 
   //checks if new movement will collide with other bodies
-  curr2 = head;
+/*  curr2 = head;
   while(curr2!= NULL){
     //so it doesn't check with itself
     if (curr1 == curr2)
@@ -204,7 +204,15 @@ bool CarCheck(int startx, int starty, int orientation, int size){
     check=CoorComp(0,3,104, 2, 3,1,118,3);
     printf("curr1%d, curr2%d\n",curr1->id, curr2->id );
     curr2=curr2->next;
+  }*/
+  printf("car %d\n", car );
+  for(i=0; i<=numberOfCars; i++){
+    if(car==i)
+      i++;
+    check=CoorComp(startx, starty, orientation, size, carArray[i].coor.x, carArray[i].coor.y, carArray[i].orientation, carArray[i].length);
   }
+
+
   printf("check: %d\n", check);
   if(check!=1)
     return false;
@@ -212,25 +220,11 @@ bool CarCheck(int startx, int starty, int orientation, int size){
   
 }
 
-int CarUp(Car *car){
-  int copy = car->coor.y;
-  copy++;
-
-  if(CarCheck(car->coor.x, copy, car->orientation, car->length) == true){
-    printf("TRUE\n");
-    return 1;
-  }
-  else{
-    printf("FALSE\n");
-    return 0;
-  }
-}
-
-int CarDown(Car *car){
-  int copy = car->coor.y;
+int CarUp(Car carArray[], int car){
+  int copy = carArray[car].coor.x;
   copy--;
 
-  if(CarCheck(car->coor.x, copy, car->orientation, car->length) == true){
+  if(CarCheck(copy, carArray[car].coor.y, carArray, car) == true){
     printf("TRUE\n");
     return 1;
   }
@@ -239,11 +233,25 @@ int CarDown(Car *car){
     return 0;
   }
 }
-int CarLeft(Car *car){
-  int copy = car->coor.x;
+
+int CarDown(Car carArray[], int car){
+  int copy = carArray[car].coor.x;
+  copy++;
+
+  if(CarCheck(copy, carArray[car].coor.y, carArray, car) == true){
+    printf("TRUE\n");
+    return 1;
+  }
+  else{
+    printf("FALSE\n");
+    return 0;
+  }
+}
+int CarLeft(Car carArray[], int car){
+  int copy = carArray[car].coor.y;
   copy--;
 
-  if(CarCheck(copy, car->coor.y, car->orientation, car->length) == true){
+  if(CarCheck(carArray[car].coor.x, copy, carArray, car) == true){
     printf("TRUE\n");
     return 1;
   }
@@ -253,10 +261,10 @@ int CarLeft(Car *car){
   }
 }
 
-int CarRight(Car *car){
-  int copy = car->coor.x;
+int CarRight(Car carArray[], int car){
+  int copy = carArray[car].coor.y;
   copy++;
-  if(CarCheck(copy, car->coor.y, car->orientation, car->length) == true){
+  if(CarCheck(carArray[car].coor.x, copy, carArray, car) == true){
     printf("TRUE\n");
     return 1;
   }
@@ -267,7 +275,7 @@ int CarRight(Car *car){
 }
 
 
-int CopyArray(char array1[], char array2[]){
+void CopyArray(char array1[], char array2[]){
   int i;
  // printf("%s\n", array1);
 //  printf("%ld\n", sizeof(array1)/sizeof(int));
@@ -294,8 +302,8 @@ Node* initState(int lvl, int heur, int cost, Node *par, Node **child, int id, in
   //Node->carArray = (Node*)malloc
 }
 
-void aStar(){
-  curr1 = head;
+void aStar(Node *node){
+  CarUp(node->carArray, 4);
   
   //returns 1 to ifmove if move is possible; no storing of new values yet
   //make root node
