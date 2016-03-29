@@ -44,9 +44,9 @@ int main () {
     n_curr= n_head;
     aStar(n_curr);
 
-
+    BFS();
     // trial of CopyArray
-    char array1[100], array2[100];
+/*    char array1[100], array2[100];
     array1[0]= 'a';
     array1[1]= 'b';
     array1[2]= 'c';
@@ -54,7 +54,7 @@ int main () {
     array1[4]= 'f';
     array1[5]= 'h';
     array1[6]= 'i';
-    array1[7]= 'l';
+    array1[7]= 'l';*/
     //CopyArray(array1,array2);
     //printf("%s\n", array2);
     fclose(fp);

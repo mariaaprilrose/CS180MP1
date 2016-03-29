@@ -26,15 +26,15 @@ struct node{
   Car *carArray;
   //access array of coordinates
 };
-Node *node_head;
 
-// typedef struct node Node;
-// struct node{
-//   int currentHeuristic;
-//   int currentCost;
-//   Car *cars;
-//   Node **children;
-// };
+typedef struct queue Queue;
+struct queue{
+  Queue *next;
+  int laman;
+  Node *ptr;
+};
+
+Node *node_head;
 
 /*Global Vasiables*/
 int matrixSize;
@@ -50,6 +50,10 @@ Node *tempNode;
 Node *n_head;
 Node *n_curr;
 
+Queue *Q_head;
+Queue *Q_curr;
+
+
 /*Functions*/
 void initGrid();
 void printGrid();
@@ -63,6 +67,10 @@ int CarUp(Car carArray[], int car);
 int CarDown(Car carArray[], int car);
 int CarLeft(Car carArray[], int car);
 int CarRight(Car carArray[], int car);
-void CopyArray(char array1[], char array2[]);
+void CopyCar(Car array1[], Car array2[]);
 void aStar(Node *node);
+Node* initState(Node* state,int lvl, int heur, int cost, int id, int x, int y);
+void push(Node *pointer, int data);
+void pop(Node *pointer);
+void printQ();
 void BFS();
