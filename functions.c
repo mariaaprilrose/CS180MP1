@@ -295,7 +295,7 @@ Node* initState(Node* state,int lvl, int heur, int cost, int id, int x, int y){
   //Node->carArray = (Node*)malloc
 }
 
-void insertToQueue(node *pointer, int data){//EDIT: this is copy pasted from internet
+void insertToQueue(Node *node, int data){//EDIT: this is copy pasted from internet
 
         /* Iterate through the list till we encounter the last node.*/
         while(pointer->next!=NULL)
@@ -310,7 +310,7 @@ void insertToQueue(node *pointer, int data){//EDIT: this is copy pasted from int
         pointer->next = NULL;
 }
 
-void delete(node *pointer, int data){//EDIT: this is copy pasted from internet
+void popQueue(node *pointer, int data){//EDIT: this is copy pasted from internet
   
         /* Go to the node for which the node next to it has to be deleted */
         while(pointer->next!=NULL && (pointer->next)->data != data)

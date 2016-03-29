@@ -19,17 +19,21 @@ int main () {
     getFile(fp);
     Car carList[numberOfCars];
 
-    Node *headNode = (Node*)malloc(sizeof(Node));
-    headNode->parent = NULL;
-    headNode->children = NULL;
-    headNode->level=0;
-    headNode->currHeuristic=0;//get heuristic here
-    headNode->currCost=0;
-    headNode->carArray = carList;
-    createCarArray(headNode->carArray);
+    Node *rootNode = (Node*)malloc(sizeof(Node));
+    rootNode->parent = NULL;
+    rootNode->children = NULL;
+    rootNode->level=0;
+    rootNode->currHeuristic=0;//get heuristic here
+    rootNode->currCost=0;
+    rootNode->carArray = carList;
+    createCarArray(rootNode->carArray);
+
+    //add rootnode to queue
+    insertToQueue(rootNode);
+    
     printf("\n");
     for(i=0;i<matrixSize;i++){
-      printf("CAR ARRAY ID #%d (%d,%d)\n", headNode->carArray[i].id,headNode->carArray[i].coor.x,headNode->carArray[i].coor.y);
+      printf("CAR ARRAY ID #%d (%d,%d)\n", rootNode->carArray[i].id,rootNode->carArray[i].coor.x,headNode->carArray[i].coor.y);
     }
     
     // if(i==matrixSize){
