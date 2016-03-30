@@ -192,19 +192,6 @@ bool CarCheck(int startx, int starty, Car carArray[], int car){
       check = 2;
   }    
 
-  //checks if new movement will collide with other bodies
-/*  curr2 = head;
-  while(curr2!= NULL){
-    //so it doesn't check with itself
-    if (curr1 == curr2)
-      curr2=curr2->next;
-    if (curr2 ==NULL)
-      break;
-    //check = CoorComp(x,y, orientation, size, curr2->coor.x, curr2->coor.y, curr2->orientation, curr2->size)
-    check=CoorComp(0,3,104, 2, 3,1,118,3);
-    printf("curr1%d, curr2%d\n",curr1->id, curr2->id );
-    curr2=curr2->next;
-  }*/
   printf("car %d\n", car );
   for(i=0; i<=numberOfCars; i++){
     if(car==i)
@@ -275,45 +262,52 @@ int CarRight(Car carArray[], int car){
 }
 
 
-void CopyArray(char array1[], char array2[]){
+
+void CopyCar(Car array1[], Car array2[]){
+//not sure if fucking right :))
   int i;
  // printf("%s\n", array1);
 //  printf("%ld\n", sizeof(array1)/sizeof(int));
   for(i=0; i<=(sizeof(array1)/sizeof(array1[0])); i++){
-    printf("%c\n", array1[i]);
+    printf("%c\n", array1[i].id);
+    //array2[i]=(Car*)malloc(sizeof(Car));
     array2[i]= array1[i];
   }
 }
 
 Node* initState(Node* state,int lvl, int heur, int cost, int id, int x, int y){
-  // state->parent = par;
-  // state->children = child;
-  state->level = lvl;
-  state->currHeuristic = heur;
-  state->currCost = cost;
+  state->parent = NULL;
+  state->children = NULL;
+  state->level = 0;
+  state->currHeuristic = 0;
+  state->currCost = 0;
   return state;
   //Node->carArray = (Node*)malloc
 }
 
-void insertToQueue(Node *node, int data){//EDIT: this is copy pasted from internet
+void push(Node *pointer, int data){
+  if (Q_head==NULL){
+      printf("Qhead is null\n");
+      Q_head=(Queue*)malloc(sizeof(Queue));
+      Q_head->ptr = pointer;
+      Q_head->next= NULL;
+      Q_head->laman=data;
+      Q_curr = Q_head;
+  }
+  else{
+      Q_curr->next= (Queue*)malloc(sizeof(Queue));
+      Q_curr= Q_curr->next;
+      Q_curr->ptr = pointer;
+      Q_curr->next= NULL; 
+      Q_curr->laman=data;    
+  }
 
-        /* Iterate through the list till we encounter the last node.*/
-        while(pointer->next!=NULL)
-        {
-                pointer = pointer -> next;
-        }
-        /* Allocate memory for the new node and put data in it.*/
-        pointer->next = (node *)malloc(sizeof(node));
-        (pointer->next)->prev = pointer;
-        pointer = pointer->next;
-        pointer->data = data;
-        pointer->next = NULL;
 }
 
-void popQueue(node *pointer, int data){//EDIT: this is copy pasted from internet
+void pop(Node *pointer){//EDIT: this is copy pasted from internet
   
-        /* Go to the node for which the node next to it has to be deleted */
-        while(pointer->next!=NULL && (pointer->next)->data != data)
+  /* Go to the node for which the node next to it has to be deleted */
+     /*   while(pointer->next!=NULL && (pointer->next)->data != data)
         {
                 pointer = pointer -> next;
         }
@@ -321,62 +315,124 @@ void popQueue(node *pointer, int data){//EDIT: this is copy pasted from internet
         {
                 printf("Element %d is not present in the list\n",data);
                 return;
-        }
+        }*/
         /* Now pointer points to a node and the node next to it has to be removed */
-        node *temp;
-        temp = pointer -> next;
+        //node *temp;
+        //temp = pointer -> next;
         /*temp points to the node which has to be removed*/
-        pointer->next = temp->next;
-        temp->prev =  pointer;
+        //pointer->next = temp->next;
+        //temp->prev =  pointer;
         /*We removed the node which is next to the pointer (which is also temp) */
-        free(temp);
+        //free(temp);
         /* Beacuse we deleted the node, we no longer require the memory used for it . 
            free() will deallocate the memory.
          */
-        return;
+    //    return;
 }
 
+void printQ(){
+  Queue *temp;
+  temp = Q_head;
+  while(temp!=NULL){
+    printf("Level Of Queue%d\n", temp->laman);
+    temp=temp->next;
+  }
+}
 
-void BFS(Node currNode, queue){// make queue
+bool mainCarNotOnExit(Car mainCar){
+
+}
+
+Node* makeNewNode(Car carArray[], Node *parent){
+  Node *node = (Node*)malloc(sizeof(Node));
+  node->parent = parent;
+  node->children = NULL;
+  
+  node->level = parent->level + 1;
+  node->currHeuristic = 0;//get heuristic here
+  node->currCost = 0;
+  node->carArray = carArray[];
+  createCarArray(node->carArray);
+}
+
+void moveUp(Car* car, int index){//struct
+  car.coor.y++;
+}
+
+void BFS(Node *currNode){// make queue
   int i,j;
-  currNode = popQueue(queue);//make pop function
-  for(i=0;i<numberOfCars;i++){
+  Q_head = NULL;
+  Q_curr = NULL;
 
-    if(currNode->orientation==118){//vertical
-      if(CarUp(currNode->carArray[i],i)==1){
-        Car* currNode->newCarArray = (Car*)malloc(sizeof(Car));
+  Car tempNode
+
+  for(i=0;i<3;i++){
+    push(NULL, i);
+  }
+  printQ();
+
+  for(i=0;i<numberOfCars;i++){//check all allowed moves per car (U/D,L/R)
+    if(currNode->orientation==118){
+
+      if(CarUp(currNode->carArray[i],i)==1){//if UP move valid
+        Car carArray = (Car*)malloc(sizeof(Car));//make carArray holder/temp
         for(j=0;j<numberOfCars;j++){
-          currNode->newCarArray[i] = currNode->carArray[i];
+          carArray[j] = currNode->carArray[j]//copy contents of current's array
         }
-        moveUp(currNode->newCarArray[i],i);//make moveUp(carArray,index)
-        Node* newNode = (Node*)malloc(sizeof(Node));
-        newNode->carArray = currNode->newCarArray;
-        initState(newNode);
-        //newNode->parent = currNode; 
-        //newNode->children = 
-        insertQueue(newNode);
+        moveUp(currNode->carArray[i],i);//apply move
+        //tempNode = 
+        currNode->children = makeNewNode(carArray[],currNode);
       }
 
     }
 
   }
+  //currNode = pop(queue);//make pop function
+  //for(i=0;i<numberOfCars;i++){
 
+    //if(currNode->orientation==118){//vertical
+    //  if(CarUp(currNode->carArray[i],i)==1){
+      //  Car* newNode->newCarArray = (Car*)malloc(sizeof(Car));
+/*        for(j=0;j<numberOfCars;j++){
+          currNode->newCarArray[i] = currNode->carArray[i];
+        }
+
+        copyCar*/
+        //moveUp(currNode->newCarArray[i],i);//make moveUp(carArray,index)
+        //Node* newNode = (Node*)malloc(sizeof(Node));
+        //newNode->carArray = currNode->newCarArray;
+        //initState(newNode);
+        //newNode->parent = currNode; 
+        //newNode->children = 
+        //insertQueue(newNode);
+      //}
+   // }
+  //}
 }
-
-void aStar(){
-  curr1 = head;
 
 void aStar(Node *node){
-  CarUp(node->carArray, 4);
-  
-  //returns 1 to ifmove if move is possible; no storing of new values yet
-  //make root node
-  //stempNode = initState(0,0,0,NULL,NULL,);
-  // while(){ //while 
-  //   if(CarUp(curr1) == 1){
-  //     printf("UP");
-  //     //tempNode = initState()
-  //   }
-  // }
-
+  CarUp(node->carArray, 4);  
 }
+
+void makeRoot(Car carArray[]){
+  int i;
+  Node *rootNode = (Node*)malloc(sizeof(Node));
+  rootNode->parent = NULL;
+  rootNode->children = NULL;
+  rootNode->level=0;
+  rootNode->currHeuristic=0;//get heuristic here
+  rootNode->currCost=0;
+  rootNode->carArray = carArray;
+  createCarArray(rootNode->carArray);
+
+  printf("\n");
+  for(i=0;i<matrixSize;i++){
+    printf("CAR ARRAY ID #%d (%d,%d)\n", rootNode->carArray[i].id,rootNode->carArray[i].coor.x,rootNode->carArray[i].coor.y);
+  }
+
+  n_head = rootNode;
+  n_curr = n_head;
+  aStar(n_curr);
+  BFS(rootNode);
+}
+
