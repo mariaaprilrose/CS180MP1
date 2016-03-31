@@ -317,7 +317,7 @@ void push(Node *pointer){//, int data){
 
 }
 
-Node pop(){//EDIT: this is copy pasted from internet
+Node* pop(){//EDIT: this is copy pasted from internet
   Queue *pointer;
   
   // if (Q_head==NULL){
@@ -333,7 +333,6 @@ Node pop(){//EDIT: this is copy pasted from internet
   //   // //pointer = Q_head->next;
   
   pointer = Q_head;
-  printf("++++ POINTER->PTR->LEVEL IS %d\n",pointer->ptr->level);
   Q_head = Q_head->next;
   if(Q_head==NULL){
     //printf("++++ Q HEAD %d\n",Q_head->ptr->level);
@@ -341,11 +340,11 @@ Node pop(){//EDIT: this is copy pasted from internet
     Q_curr = NULL;
   }
   else{
-    //Q_curr = Q_head;
+    //  Q_curr = Q_head;
     pointer->next = NULL;
   }
-  
-  return *pointer->ptr;
+  printf("++++ BEFORE RETURN POINTER->PTR->LEVEL IS %d\n",pointer->ptr->level);
+  return pointer->ptr;
 }
 
 void printQ(){
@@ -418,11 +417,10 @@ void BFS(Node *currNode){// make queue
         moveUp(carArray,i);
         newNode=makeNewNode(carArray, currNode);
         push(newNode);
-       
       }
     }
   }
-  else
+  else if(currNode==NULL)
     printf("+***+ Current node is NULL so no more node to BFS\n");
 }
 
