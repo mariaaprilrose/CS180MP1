@@ -45,6 +45,7 @@ Car *TempCar;
 Car *head;
 Car *curr1;
 Car *curr2;
+Car *carArray;
 Node *tempNode;
 
 Node *n_head;
@@ -71,8 +72,8 @@ int CarRight(Car carArray[], int car);
 void CopyCar(Car array1[], Car array2[]);
 void aStar(Node *node);
 Node* initState(Node* state,int lvl, int heur, int cost, int id, int x, int y);
-void push(Node *pointer, int data);
-void pop(Node *pointer);
+void push(Node *pointer);//, int data);
+Queue pop();
 void printQ();
 void BFS();
 void makeRoot(Car carList[]);
