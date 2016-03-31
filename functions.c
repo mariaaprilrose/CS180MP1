@@ -320,13 +320,45 @@ void push(Node *pointer){//, int data){
 Node pop(){//EDIT: this is copy pasted from internet
   Queue *pointer;
   
-  if (Q_head==NULL){
-    printf("WALANG LAMAN BITCH\n");   
+  // if (Q_head==NULL){
+  //   printf("WALANG LAMAN BITCH\n");   
+  // }
+  // else{
+  //   printf("++++ Q HEAD %d\n", Q_head->ptr->level);
+  //   // pointer = Q_curr;
+  //   // pointer = Q_curr->next;
+  //   // // // printf("++++ Q HEAD %d\n", pointer->next->ptr->carArray[0].id);
+  //   // // pointer=pointer->next;
+  //   // // Q_head=Q_head->next;
+  //   // //pointer = Q_head->next;
+    
+  //   // //Q_head->next = NULL;
+  //   // printf("++++ POINTER %s\n",pointer);
+  //   // Q_head = pointer;
+  //   pointer = Q_head;
+  //   printf("++++ POINTER %d\n",pointer->ptr->level);
+  //   Q_head = Q_head->next;
+  //   if(Q_head==NULL){
+  //     //printf("++++ Q HEAD %d\n",Q_head->ptr->level);
+  //     printf("WALANG LAMAN BITCH\n");
+  //     Q_curr = NULL;
+  //   }
+  //   else{
+  //     Q_curr = Q_head;
+  //     pointer->next = NULL;
+  //   }
+  
+  pointer = Q_head;
+  printf("++++ POINTER->PTR->LEVEL IS %d\n",pointer->ptr->level);
+  Q_head = Q_head->next;
+  if(Q_head==NULL){
+    //printf("++++ Q HEAD %d\n",Q_head->ptr->level);
+    printf("WALANG LAMAN BITCH\n");
+    Q_curr = NULL;
   }
   else{
-    pointer->next=Q_head;
-    pointer=pointer->next;
-    Q_head=Q_head->next;
+    Q_curr = Q_head;
+    pointer->next = NULL;
   }
   
   return *pointer->ptr;
@@ -393,17 +425,21 @@ void BFS(Node *currNode){// make queue
     push(NULL, i);
   }
   printQ();*/
-
-  for(i=0;i<numberOfCars;i++){//check all allowed moves per car (U/D,L/R)
-    if(CarUp(currNode->carArray,i)==1){//if UP move valid
-      carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
-      CopyCar(currNode->carArray, carArray);
-      moveUp(carArray,i);
-      newNode=makeNewNode(carArray, currNode);
-      push(newNode);
-     
+  if(currNode!=NULL){
+    for(i=0;i<numberOfCars;i++){//check all allowed moves per car (U/D,L/R)
+      printf("Checking allowed moves\n");
+      if(CarUp(currNode->carArray,i)==1){//if UP move valid
+        carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
+        CopyCar(currNode->carArray, carArray);
+        moveUp(carArray,i);
+        newNode=makeNewNode(carArray, currNode);
+        push(newNode);
+       
+      }
     }
   }
+  else
+    printf("+***+ Current node is NULL so no more node to BFS\n");
 }
 
 void aStar(Node *node){
