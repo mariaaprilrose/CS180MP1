@@ -14,7 +14,8 @@ int main () {
     int field[100][100];
     char buff[255];
     int i;
-
+    Q_head = NULL;
+    Q_curr = NULL;
     fp = fopen("a.txt", "r");
     getFile(fp);
     Car carArray[numberOfCars];

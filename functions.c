@@ -317,8 +317,9 @@ void push(Node *pointer){//, int data){
 
 }
 
-Queue pop(){//EDIT: this is copy pasted from internet
+Node pop(){//EDIT: this is copy pasted from internet
   Queue *pointer;
+  
   if (Q_head==NULL){
     printf("WALANG LAMAN BITCH\n");   
   }
@@ -328,7 +329,7 @@ Queue pop(){//EDIT: this is copy pasted from internet
     Q_head=Q_head->next;
   }
   
-  return *pointer;
+  return *pointer->ptr;
 }
 
 void printQ(){
@@ -386,9 +387,6 @@ void moveRight(Car carArray[], int index){//struct
 
 void BFS(Node *currNode){// make queue
   int i,j;
-  Q_head = NULL;
-  Q_curr = NULL;
-
   Node *newNode;
 
 /*  for(i=0;i<3;i++){
@@ -430,7 +428,7 @@ void makeRoot(Car carArray[]){
 
   /*n_head = rootNode;
   n_curr = n_head;
-*/  push(rootNode);
+*/push(rootNode);
   printf("mAKE ROOT PIECE OF SHIT");
 }
 

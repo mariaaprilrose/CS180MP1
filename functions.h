@@ -73,7 +73,7 @@ void CopyCar(Car array1[], Car array2[]);
 void aStar(Node *node);
 Node* initState(Node* state,int lvl, int heur, int cost, int id, int x, int y);
 void push(Node *pointer);//, int data);
-Queue pop();
+Node pop();
 void printQ();
 void BFS();
 void makeRoot(Car carList[]);
