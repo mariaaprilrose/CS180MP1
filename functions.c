@@ -331,22 +331,6 @@ Node pop(){//EDIT: this is copy pasted from internet
   //   // // pointer=pointer->next;
   //   // // Q_head=Q_head->next;
   //   // //pointer = Q_head->next;
-    
-  //   // //Q_head->next = NULL;
-  //   // printf("++++ POINTER %s\n",pointer);
-  //   // Q_head = pointer;
-  //   pointer = Q_head;
-  //   printf("++++ POINTER %d\n",pointer->ptr->level);
-  //   Q_head = Q_head->next;
-  //   if(Q_head==NULL){
-  //     //printf("++++ Q HEAD %d\n",Q_head->ptr->level);
-  //     printf("WALANG LAMAN BITCH\n");
-  //     Q_curr = NULL;
-  //   }
-  //   else{
-  //     Q_curr = Q_head;
-  //     pointer->next = NULL;
-  //   }
   
   pointer = Q_head;
   printf("++++ POINTER->PTR->LEVEL IS %d\n",pointer->ptr->level);
@@ -357,7 +341,7 @@ Node pop(){//EDIT: this is copy pasted from internet
     Q_curr = NULL;
   }
   else{
-    Q_curr = Q_head;
+    //Q_curr = Q_head;
     pointer->next = NULL;
   }
   
