@@ -9,14 +9,36 @@ int zeroHeuristic(){
   return 0;
 }
 
-int blockHeuristic(){
-  int carsBlocking = 1;
-  carsBlocking+=1;
+int blockHeuristic(Car carArray [], int matrixSize){
+  int heuristic = 1;
+  int carsBlocking;
+
+  //Get number of blocking cars
+
+  //End get number of blocking cars
+
   return carsBlocking;
 }
 
 int advanceHeuristic(){
   
+}
+
+/*Inputs: *mainCar - goalCar; the first car in carArray
+          goalX, goalY - coordinates of exit point 
+  Returns: True, if it has reached goal state
+           else, false
+*/
+bool isGoalState(Car *mainCar, int goalX, int goalY){
+  if((mainCar->orientation == 'v') && (mainCar->coor.y >= goalY)){
+    if(mainCar->coor.y > goalY) printf("Car exceeded goal point.");
+    return true;
+  }
+  if((mainCar->orientation == 'h') && (mainCar->coor.x >= goalX)){
+    if(mainCar->coor.x > goalX) printf("Car exceeded goal point.");
+    return true;
+  }
+  else return false;
 }
 
 int cost(){
