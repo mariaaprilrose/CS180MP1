@@ -1,9 +1,45 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <string.h>
-#define _GNU_SOURCE
 #include <stdlib.h>
 #include <stdbool.h>
 #include "functions.h"
+#include <errno.h>
+ssize_t getdelim(char **linep, size_t *n, int delim, FILE *fp){
+    int ch;
+    size_t i = 0;
+    if(!linep || !n || !fp){
+        errno = EINVAL;
+        return -1;
+    }
+    if(*linep == NULL){
+        if(NULL==(*linep = malloc(*n=128))){
+            *n = 0;
+            errno = ENOMEM;
+            return -1;
+        }
+    }
+    while((ch = fgetc(fp)) != EOF){
+        if(i + 1 >= *n){
+            char *temp = realloc(*linep, *n + 128);
+            if(!temp){
+                errno = ENOMEM;
+                return -1;
+            }
+            *n += 128;
+            *linep = temp;
+        }
+        (*linep)[i++] = ch;
+        if(ch == delim)
+            break;
+    }
+    (*linep)[i] = '\0';
+    return !i && ch == EOF ? -1 : i;
+}
+ssize_t getline(char **linep, size_t *n, FILE *fp){
+    return getdelim(linep, n, '\n', fp);
+}
+
 
 int zeroHeuristic(){
   return 0;
@@ -11,11 +47,24 @@ int zeroHeuristic(){
 
 int blockHeuristic(Car carArray [], int goalX, int goalY){
   int heuristic = 1;
-  int carsBlocking;
-
+  int carsBlocking = 0;
+  int i;
+  int tempX;
+  int tempY;
+  /*DONT TOUCH*/
   //Get number of blocking cars
+  /*for(i = 1; i < numberOfCars; i++){
+    if(carArray[i].orientation == carArray[0].orientation){ // might never happen
+      if(carArray[i].orientation == 'h'){
+        if(goalX > (carArray[i].coor.x - carArray[i].length))
+      }
+      else{
 
+      }
+    }
+  }*/
   //End get number of blocking cars
+  /*DONT TOUCH*/
 
   return carsBlocking;
 }
@@ -30,12 +79,12 @@ int advanceHeuristic(){
            else, false
 */
 bool isGoalState(Car *mainCar, int goalX, int goalY){
-  if((mainCar->orientation == 'v') && (mainCar->coor.y >= goalY)){
-    if(mainCar->coor.y > goalY) printf("Car exceeded goal point.");
+  if((mainCar->orientation == 'v') && ((mainCar->coor.y + mainCar->length - 1) >= goalY)){
+    if((mainCar->coor.y + mainCar->length - 1) > goalY) printf("Car exceeded goal point.");
     return true;
   }
-  if((mainCar->orientation == 'h') && (mainCar->coor.x >= goalX)){
-    if(mainCar->coor.x > goalX) printf("Car exceeded goal point.");
+  if((mainCar->orientation == 'h') && ((mainCar->coor.x + mainCar->length - 1) >= goalX)){
+    if((mainCar->coor.x + mainCar->length - 1) > goalX) printf("Car exceeded goal point.");
     return true;
   }
   else return false;
