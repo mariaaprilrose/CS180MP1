@@ -192,7 +192,7 @@ bool CarCheck(int startx, int starty, Car carArray[], int car){
       check = 2;
   }    
 
-  printf("car %d\n", car );
+  printf("Car %d\n", car+1 );
   for(i=0; i<=numberOfCars; i++){
     if(car==i)
       i++;
@@ -214,11 +214,11 @@ int CarUp(Car carArray[], int car){
     return 0;
 
   if(CarCheck(copy, carArray[car].coor.y, carArray, car) == true){
-    printf("TRUE\n");
+    printf("UP is TRUE\n");
     return 1;
   }
   else{
-    printf("FALSE\n");
+    printf("UP is FALSE\n");
     return 0;
   }
 }
@@ -230,11 +230,11 @@ int CarDown(Car carArray[], int car){
     return 0;
 
   if(CarCheck(copy, carArray[car].coor.y, carArray, car) == true){
-    printf("TRUE\n");
+    printf("DOWN is TRUE\n");
     return 1;
   }
   else{
-    printf("FALSE\n");
+    printf("DOWN is FALSE\n");
     return 0;
   }
 }
@@ -246,11 +246,11 @@ int CarLeft(Car carArray[], int car){
   if(carArray[car].orientation==118)
     return 0;
   if(CarCheck(carArray[car].coor.x, copy, carArray, car) == true){
-    printf("TRUE\n");
+    printf("LEFT is TRUE\n");
     return 1;
   }
   else{
-    printf("FALSE\n");
+    printf("LEFT is FALSE\n");
     return 0;
   }
 }
@@ -263,11 +263,11 @@ int CarRight(Car carArray[], int car){
     return 0;
   
   if(CarCheck(carArray[car].coor.x, copy, carArray, car) == true){
-    printf("TRUE\n");
+    printf("RIGHT is TRUE\n");
     return 1;
   }
   else{
-    printf("FALSE\n");
+    printf("RIGHT is FALSE\n");
     return 0;
   }
 }
@@ -409,8 +409,8 @@ void BFS(Node *currNode){// make queue
   }
   printQ();*/
   if(currNode!=NULL){
-    for(i=0;i<numberOfCars;i++){//check all allowed moves per car (U/D,L/R)
-      printf("Checking allowed moves\n");
+    for(i=0;i<numberOfCars;i++){//check allprintf allowed moves per car (U/D,L/R)
+      printf("Checking allowed moves for Car %d\n",currNode->carArray[i].id);
       if(CarUp(currNode->carArray,i)==1){//if UP move valid
         carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
         CopyCar(currNode->carArray, carArray);
@@ -418,6 +418,31 @@ void BFS(Node *currNode){// make queue
         newNode=makeNewNode(carArray, currNode);
         push(newNode);
       }
+
+      // if(CarDown(currNode->carArray,i)==1){//if DOWN move valid
+      //   carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
+      //   CopyCar(currNode->carArray, carArray);
+      //   moveDown(carArray,i);
+      //   newNode=makeNewNode(carArray, currNode);
+      //   push(newNode);
+      // }
+
+      // if(CarLeft(currNode->carArray,i)==1){//if UP move valid
+      //   carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
+      //   CopyCar(currNode->carArray, carArray);
+      //   moveLeft(carArray,i);
+      //   newNode=makeNewNode(carArray, currNode);
+      //   push(newNode);
+      // }
+
+      // if(CarDown(currNode->carArray,i)==1){//if UP move valid
+      //   carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
+      //   CopyCar(currNode->carArray, carArray);
+      //   moveUp(carArray,i);
+      //   newNode=makeNewNode(carArray, currNode);
+      //   push(newNode);
+      // }
+
     }
   }
   else if(currNode==NULL)
