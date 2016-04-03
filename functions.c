@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "functions.h"
+/* remove this block before passing; for windows only; copy pasted from the net */
 #include <errno.h>
 ssize_t getdelim(char **linep, size_t *n, int delim, FILE *fp){
     int ch;
@@ -39,7 +40,7 @@ ssize_t getdelim(char **linep, size_t *n, int delim, FILE *fp){
 ssize_t getline(char **linep, size_t *n, FILE *fp){
     return getdelim(linep, n, '\n', fp);
 }
-
+/*END remove this block before passing; for windows only; copy pasted from the net END*/
 
 int zeroHeuristic(){
   return 0;
@@ -478,6 +479,51 @@ bool configExists(Car carArray[]){
     current = current->next;
   }
   return false;
+}
+
+// To be used for a*
+// Inserts node into 'list' (using structure Queue)
+void insert(Node *node){
+  Queue *current = Q_head;
+  Queue *prev = NULL;
+  Node *tempNode;
+  Queue *tempQ;
+
+  if(current == NULL){
+    printf("Inserting into empty list\n");
+    Q_head = (Queue*)malloc(sizeof(Queue));
+    Q_orighead = Q_head;
+    Q_head->ptr = node;
+    Q_head->next= NULL;
+    Q_curr = Q_head;
+  }
+  else{
+    while(current != NULL){
+      tempNode = current->ptr;
+      if((tempNode->currHeuristic + tempNode->currCost) > (node->currHeuristic + node->currCost)){
+        tempQ = (Queue*)malloc(sizeof(Queue));
+        tempQ->ptr = node;
+
+        if(prev == NULL){ //Kung mas maliit yung heuristic+cost ni new node kay head node
+          tempQ->next = Q_head;
+          Q_head = tempQ;
+        }
+        else{
+          prev->next = tempQ;
+          tempQ->next = current; 
+        }
+        return;
+      }
+      
+      prev = current;
+      current = current->next;
+    }
+    //Kung umabot na sa dulo, hindi pa naiinsert (meaning: mas malaki heuristic+cost ni new node sa lahat ng existing nodes)
+    prev->next = (Queue*)malloc(sizeof(Queue));
+    Q_curr = prev->next;
+    Q_curr->ptr = node;
+    Q_curr->next= NULL; 
+  }
 }
 
 void moveUp(Car carArray[], int index){//struct
