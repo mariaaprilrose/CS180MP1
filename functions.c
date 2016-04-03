@@ -385,7 +385,8 @@ void push(Node *pointer){//, int data){
   // data was only used to check the content of the push
   if (Q_head==NULL){
       printf("Qhead is null\n");
-      Q_head=(Queue*)malloc(sizeof(Queue));
+      Q_head = (Queue*)malloc(sizeof(Queue));
+      Q_orighead = Q_head;
       Q_head->ptr = pointer;
       Q_head->next= NULL;
       //Q_head->laman=data;
@@ -393,8 +394,8 @@ void push(Node *pointer){//, int data){
   }
   else{
     printf("I CAN PUSH BITCH\n");
-      Q_curr->next= (Queue*)malloc(sizeof(Queue));
-      Q_curr= Q_curr->next;
+      Q_curr->next = (Queue*)malloc(sizeof(Queue));
+      Q_curr = Q_curr->next;
       Q_curr->ptr = pointer;
       Q_curr->next= NULL; 
       //Q_curr->laman=data;    
@@ -426,7 +427,7 @@ Node* pop(){//EDIT: this is copy pasted from internet
   }
   else{
     //  Q_curr = Q_head;
-    pointer->next = NULL;
+    //pointer->next = NULL; // Commented out this line to be able to keep whole Queue even after popping (for config checking)
   }
   printf("++++ BEFORE RETURN POINTER->PTR->LEVEL IS %d\n",pointer->ptr->level);
   return pointer->ptr;
@@ -455,6 +456,28 @@ Node* makeNewNode(Car carArray[], Node *parent){
   node->currCost = 0;
   node->carArray = carArray;
   
+}
+
+
+/* Input: carArray - array of cars of node to be checked
+   Returns: true if configuration was already existing in previous nodes, else returns false
+*/
+bool configExists(Car carArray[]){
+  Queue *current = Q_orighead;
+  Car *currentCars; 
+  int i;
+
+  while(current != NULL){
+    currentCars = current->ptr->carArray; 
+    for(i = 0; i < numberOfCars; i++){
+      if((currentCars[i].coor.x == carArray[i].coor.x) && (currentCars[i].coor.y == carArray[i].coor.y)){
+        if(i == (numberOfCars - 1)) return true; // if last car na sya sa array, tapos equal pa rin yung coors, ibig sabihin pareho sila ng content sa carArray
+      }
+      else i = numberOfCars;
+    }
+    current = current->next;
+  }
+  return false;
 }
 
 void moveUp(Car carArray[], int index){//struct

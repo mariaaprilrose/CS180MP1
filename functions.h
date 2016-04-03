@@ -54,7 +54,7 @@ Node *tempNode;
 
 Queue *Q_head;
 Queue *Q_curr;
-
+Queue *Q_orighead; // For config tracking
 
 /*Functions*/
 int blockHeuristic(Car carArray [], int goalX, int goalY);
