@@ -57,6 +57,7 @@ Queue *Q_curr;
 
 
 /*Functions*/
+int blockHeuristic(Car carArray [], int goalX, int goalY);
 bool isGoalState(Car *mainCar, int goalX, int goalY);
 void initGrid();
 void printGrid();

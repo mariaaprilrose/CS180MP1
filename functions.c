@@ -49,24 +49,38 @@ int blockHeuristic(Car carArray [], int goalX, int goalY){
   int heuristic = 1;
   int carsBlocking = 0;
   int i;
-  int tempX;
-  int tempY;
-  /*DONT TOUCH*/
+  
   //Get number of blocking cars
-  /*for(i = 1; i < numberOfCars; i++){
+  for(i = 1; i < numberOfCars; i++){
     if(carArray[i].orientation == carArray[0].orientation){ // might never happen
       if(carArray[i].orientation == 'h'){
-        if(goalX > (carArray[i].coor.x - carArray[i].length))
+        if(goalX > carArray[i].coor.x) carsBlocking++;
       }
       else{
-
+        if(goalY > carArray[i].coor.y) carsBlocking++;
       }
     }
-  }*/
+    else{
+      if(carArray[i].orientation == 'h'){ // vertical yung goal car
+        if((carArray[0].coor.y + carArray[0].length - 1) < carArray[i].coor.x){ // kung nasa baba ng goal car yung ith car
+          if(carArray[i].coor.x <= goalX && (carArray[i].coor.x + carArray[i].length - 1) >= goalX){
+            carsBlocking++;
+          }
+        }
+      }
+      else{
+        if((carArray[0].coor.x + carArray[0].length - 1) < carArray[i].coor.x){ // kung nasa kanan ng goal car yung ith car
+          if(carArray[i].coor.y <= goalY && (carArray[i].coor.y + carArray[i].length - 1) >= goalY){
+            carsBlocking++;
+          }
+        }
+      }
+    }
+  }
   //End get number of blocking cars
-  /*DONT TOUCH*/
 
-  return carsBlocking;
+  heuristic += carsBlocking;
+  return heuristic;
 }
 
 int advanceHeuristic(){
