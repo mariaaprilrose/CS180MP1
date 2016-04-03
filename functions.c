@@ -378,9 +378,6 @@ void printQ(){
   }
 }
 
-bool mainCarNotOnExit(Car mainCar){
-
-}
 
 Node* makeNewNode(Car carArray[], Node *parent){
   Node *node = (Node*)malloc(sizeof(Node));
