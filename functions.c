@@ -1,23 +1,87 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <string.h>
-#define _GNU_SOURCE
 #include <stdlib.h>
 #include <stdbool.h>
 #include "functions.h"
+/* remove this block before passing; for windows only; copy pasted from the net */
+#include <errno.h>
+ssize_t getdelim(char **linep, size_t *n, int delim, FILE *fp){
+    int ch;
+    size_t i = 0;
+    if(!linep || !n || !fp){
+        errno = EINVAL;
+        return -1;
+    }
+    if(*linep == NULL){
+        if(NULL==(*linep = malloc(*n=128))){
+            *n = 0;
+            errno = ENOMEM;
+            return -1;
+        }
+    }
+    while((ch = fgetc(fp)) != EOF){
+        if(i + 1 >= *n){
+            char *temp = realloc(*linep, *n + 128);
+            if(!temp){
+                errno = ENOMEM;
+                return -1;
+            }
+            *n += 128;
+            *linep = temp;
+        }
+        (*linep)[i++] = ch;
+        if(ch == delim)
+            break;
+    }
+    (*linep)[i] = '\0';
+    return !i && ch == EOF ? -1 : i;
+}
+ssize_t getline(char **linep, size_t *n, FILE *fp){
+    return getdelim(linep, n, '\n', fp);
+}
+/*END remove this block before passing; for windows only; copy pasted from the net END*/
 
 int zeroHeuristic(){
   return 0;
 }
 
-int blockHeuristic(Car carArray [], int matrixSize){
+int blockHeuristic(Car carArray [], int goalX, int goalY){
   int heuristic = 1;
-  int carsBlocking;
-
+  int carsBlocking = 0;
+  int i;
+  
   //Get number of blocking cars
-
+  for(i = 1; i < numberOfCars; i++){
+    if(carArray[i].orientation == carArray[0].orientation){ // might never happen
+      if(carArray[i].orientation == 'h'){
+        if(goalX > carArray[i].coor.x) carsBlocking++;
+      }
+      else{
+        if(goalY > carArray[i].coor.y) carsBlocking++;
+      }
+    }
+    else{
+      if(carArray[i].orientation == 'h'){ // vertical yung goal car
+        if((carArray[0].coor.y + carArray[0].length - 1) < carArray[i].coor.x){ // kung nasa baba ng goal car yung ith car
+          if(carArray[i].coor.x <= goalX && (carArray[i].coor.x + carArray[i].length - 1) >= goalX){
+            carsBlocking++;
+          }
+        }
+      }
+      else{
+        if((carArray[0].coor.x + carArray[0].length - 1) < carArray[i].coor.x){ // kung nasa kanan ng goal car yung ith car
+          if(carArray[i].coor.y <= goalY && (carArray[i].coor.y + carArray[i].length - 1) >= goalY){
+            carsBlocking++;
+          }
+        }
+      }
+    }
+  }
   //End get number of blocking cars
 
-  return carsBlocking;
+  heuristic += carsBlocking;
+  return heuristic;
 }
 
 int advanceHeuristic(){
@@ -30,12 +94,12 @@ int advanceHeuristic(){
            else, false
 */
 bool isGoalState(Car *mainCar, int goalX, int goalY){
-  if((mainCar->orientation == 'v') && (mainCar->coor.y >= goalY)){
-    if(mainCar->coor.y > goalY) printf("Car exceeded goal point.");
+  if((mainCar->orientation == 'v') && ((mainCar->coor.y + mainCar->length - 1) >= goalY)){
+    if((mainCar->coor.y + mainCar->length - 1) > goalY) printf("Car exceeded goal point.");
     return true;
   }
-  if((mainCar->orientation == 'h') && (mainCar->coor.x >= goalX)){
-    if(mainCar->coor.x > goalX) printf("Car exceeded goal point.");
+  if((mainCar->orientation == 'h') && ((mainCar->coor.x + mainCar->length - 1) >= goalX)){
+    if((mainCar->coor.x + mainCar->length - 1) > goalX) printf("Car exceeded goal point.");
     return true;
   }
   else return false;
@@ -322,7 +386,8 @@ void push(Node *pointer){//, int data){
   // data was only used to check the content of the push
   if (Q_head==NULL){
       printf("Qhead is null\n");
-      Q_head=(Queue*)malloc(sizeof(Queue));
+      Q_head = (Queue*)malloc(sizeof(Queue));
+      Q_orighead = Q_head;
       Q_head->ptr = pointer;
       Q_head->next= NULL;
       //Q_head->laman=data;
@@ -330,8 +395,8 @@ void push(Node *pointer){//, int data){
   }
   else{
     printf("I CAN PUSH BITCH\n");
-      Q_curr->next= (Queue*)malloc(sizeof(Queue));
-      Q_curr= Q_curr->next;
+      Q_curr->next = (Queue*)malloc(sizeof(Queue));
+      Q_curr = Q_curr->next;
       Q_curr->ptr = pointer;
       Q_curr->next= NULL; 
       //Q_curr->laman=data;    
@@ -363,7 +428,7 @@ Node* pop(){//EDIT: this is copy pasted from internet
   }
   else{
     //  Q_curr = Q_head;
-    pointer->next = NULL;
+    //pointer->next = NULL; // Commented out this line to be able to keep whole Queue even after popping (for config checking)
   }
   printf("++++ BEFORE RETURN POINTER->PTR->LEVEL IS %d\n",pointer->ptr->level);
   return pointer->ptr;
@@ -389,6 +454,73 @@ Node* makeNewNode(Car carArray[], Node *parent){
   node->currCost = 0;
   node->carArray = carArray;
   
+}
+
+
+/* Input: carArray - array of cars of node to be checked
+   Returns: true if configuration was already existing in previous nodes, else returns false
+*/
+bool configExists(Car carArray[]){
+  Queue *current = Q_orighead;
+  Car *currentCars; 
+  int i;
+
+  while(current != NULL){
+    currentCars = current->ptr->carArray; 
+    for(i = 0; i < numberOfCars; i++){
+      if((currentCars[i].coor.x == carArray[i].coor.x) && (currentCars[i].coor.y == carArray[i].coor.y)){
+        if(i == (numberOfCars - 1)) return true; // if last car na sya sa array, tapos equal pa rin yung coors, ibig sabihin pareho sila ng content sa carArray
+      }
+      else i = numberOfCars;
+    }
+    current = current->next;
+  }
+  return false;
+}
+
+// To be used for a*
+// Inserts node into 'list' (using structure Queue)
+void insert(Node *node){
+  Queue *current = Q_head;
+  Queue *prev = NULL;
+  Node *tempNode;
+  Queue *tempQ;
+
+  if(current == NULL){
+    printf("Inserting into empty list\n");
+    Q_head = (Queue*)malloc(sizeof(Queue));
+    Q_orighead = Q_head;
+    Q_head->ptr = node;
+    Q_head->next= NULL;
+    Q_curr = Q_head;
+  }
+  else{
+    while(current != NULL){
+      tempNode = current->ptr;
+      if((tempNode->currHeuristic + tempNode->currCost) > (node->currHeuristic + node->currCost)){
+        tempQ = (Queue*)malloc(sizeof(Queue));
+        tempQ->ptr = node;
+
+        if(prev == NULL){ //Kung mas maliit yung heuristic+cost ni new node kay head node
+          tempQ->next = Q_head;
+          Q_head = tempQ;
+        }
+        else{
+          prev->next = tempQ;
+          tempQ->next = current; 
+        }
+        return;
+      }
+      
+      prev = current;
+      current = current->next;
+    }
+    //Kung umabot na sa dulo, hindi pa naiinsert (meaning: mas malaki heuristic+cost ni new node sa lahat ng existing nodes)
+    prev->next = (Queue*)malloc(sizeof(Queue));
+    Q_curr = prev->next;
+    Q_curr->ptr = node;
+    Q_curr->next= NULL; 
+  }
 }
 
 void moveUp(Car carArray[], int index){//struct

@@ -54,9 +54,10 @@ Node *tempNode;
 
 Queue *Q_head;
 Queue *Q_curr;
-
+Queue *Q_orighead; // For config tracking
 
 /*Functions*/
+int blockHeuristic(Car carArray [], int goalX, int goalY);
 bool isGoalState(Car *mainCar, int goalX, int goalY);
 void initGrid();
 void printGrid();
@@ -76,5 +77,7 @@ Node* initState(Node* state,int lvl, int heur, int cost, int id, int x, int y);
 void push(Node *pointer);//, int data);
 Node* pop();
 void printQ();
+bool configExists(Car carArray[]);
+void insert(Node *node);
 void BFS();
 void makeRoot(Car carList[]);
