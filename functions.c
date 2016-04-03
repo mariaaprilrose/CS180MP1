@@ -9,7 +9,7 @@ int zeroHeuristic(){
   return 0;
 }
 
-int blockHeuristic(Car carArray [], int matrixSize){
+int blockHeuristic(Car carArray [], int goalX, int goalY){
   int heuristic = 1;
   int carsBlocking;
 
@@ -26,19 +26,19 @@ int advanceHeuristic(){
 
 /*Inputs: *mainCar - goalCar; the first car in carArray
           goalX, goalY - coordinates of exit point 
-  Returns: True, if it has reached goal state
-           else, false
+  Returns: 1(true), if it has reached goal state
+           else, 0(false)
 */
-bool isGoalState(Car *mainCar, int goalX, int goalY){
+int isGoalState(Car *mainCar, int goalX, int goalY){
   if((mainCar->orientation == 'v') && (mainCar->coor.y >= goalY)){
     if(mainCar->coor.y > goalY) printf("Car exceeded goal point.");
-    return true;
+    return 1;
   }
   if((mainCar->orientation == 'h') && (mainCar->coor.x >= goalX)){
     if(mainCar->coor.x > goalX) printf("Car exceeded goal point.");
-    return true;
+    return 1;
   }
-  else return false;
+  else return 0;
 }
 
 int cost(){

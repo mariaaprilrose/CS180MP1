@@ -57,7 +57,7 @@ Queue *Q_curr;
 
 
 /*Functions*/
-bool isGoalState(Car *mainCar, int goalX, int goalY);
+int isGoalState(Car *mainCar, int goalX, int goalY);
 void initGrid();
 void printGrid();
 void insertToGrid(Car *car);
