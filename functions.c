@@ -26,19 +26,19 @@ int advanceHeuristic(){
 
 /*Inputs: *mainCar - goalCar; the first car in carArray
           goalX, goalY - coordinates of exit point 
-  Returns: 1(true), if it has reached goal state
-           else, 0(false)
+  Returns: True, if it has reached goal state
+           else, false
 */
-int isGoalState(Car *mainCar, int goalX, int goalY){
+bool isGoalState(Car *mainCar, int goalX, int goalY){
   if((mainCar->orientation == 'v') && (mainCar->coor.y >= goalY)){
     if(mainCar->coor.y > goalY) printf("Car exceeded goal point.");
-    return 1;
+    return true;
   }
   if((mainCar->orientation == 'h') && (mainCar->coor.x >= goalX)){
     if(mainCar->coor.x > goalX) printf("Car exceeded goal point.");
-    return 1;
+    return true;
   }
-  else return 0;
+  else return false;
 }
 
 int cost(){
