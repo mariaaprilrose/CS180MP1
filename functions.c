@@ -255,38 +255,39 @@ int CoorComp(int x, int y, int coor1, int size1, int x2, int y2, int coor2, int 
 }
 
 bool CarCheck(int startx, int starty, Car carArray[], int car){
+  //what is passed from CarUp: CarCheck(copy, carArray[car].coor.y, carArray, car)
   int check = 1, i;
   int endx,endy, orientation=carArray[car].orientation,  size=carArray[car].length; 
-
-//  printf("Start %d %d %d %d\n", startx, starty, orientation, size );
+  printf("++++++++++++BOOL CARCHECK+++++++++++++\n");
+  printf("Startx:%d Starty:%d Orientation:%d Size:%d\n", startx, starty, orientation, size );
   //checks if value of head belongs to range of matrix
   if(startx >= matrixSize || starty >=matrixSize || startx <  0 || starty <0)
     check = 2;
 
-  //checks end of car orientation for horizontal
   if (orientation==104){
     endx= startx + (size-1);
     if(endx >= matrixSize || endx < 0)
       check = 2;
-      
   }      
-  
-  //checks end of car orientation for vertical
-  if (orientation=118){
+  else if (orientation=118){
     endy= starty + (size-1);
-    if(endy>= matrixSize || endy < 0)
+    printf("Startx:%d Starty:%d Orientation:%d Size:%d\n", startx, starty, orientation, size );
+    if(endy>= matrixSize || endy < 0){
       check = 2;
+      printf("Vertical Check 1: %d Car ID: %d \n",check,carArray[car].id);
+    }
   }    
 
   printf("Car %d\n", car+1 );
-  for(i=0; i<=numberOfCars; i++){
+  for(i=0; i<numberOfCars; i++){//from i<=numberOfCars
     if(car==i)
       i++;
     check=CoorComp(startx, starty, orientation, size, carArray[i].coor.x, carArray[i].coor.y, carArray[i].orientation, carArray[i].length);
+    //printf("Vertical Check 2: %d Car ID: %d \n",check,carArray[i].id);
   }
 
 
-  printf("check: %d\n", check);
+  printf("Check: %d\n", check);
   if(check!=1)
     return false;
   return true; 
@@ -300,11 +301,12 @@ int CarUp(Car carArray[], int car){
     return 0;
 
   if(CarCheck(copy, carArray[car].coor.y, carArray, car) == true){
+    printf("from %d to %d: UP is TRUE\n",carArray[car].coor.x,copy);
     printf("UP is TRUE\n");
     return 1;
   }
   else{
-    printf("UP is FALSE\n");
+    printf("from %d to %d: UP is FALSE\n", carArray[car].coor.x,copy);
     return 0;
   }
 }
@@ -562,7 +564,7 @@ void BFS(Node *currNode){// make queue
   if(currNode!=NULL){
     for(i=0;i<numberOfCars;i++){//check allprintf allowed moves per car (U/D,L/R)
       printf("Checking allowed moves for Car %d\n",currNode->carArray[i].id);
-      if(CarUp(currNode->carArray,i)==1){//if UP move valid
+      if(CarUp(currNode->carArray,i)==1 ){//if UP move valid
         carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
         CopyCar(currNode->carArray, carArray);
         moveUp(carArray,i);
