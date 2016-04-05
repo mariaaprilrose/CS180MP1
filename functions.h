@@ -41,6 +41,8 @@ int matrixSize;
 char arrayField[10][10];
 int copy_idtemp;
 int numberOfCars;
+int goalX;
+int goalY;
 Car *TempCar;
 Car *head;
 Car *curr1;
@@ -57,8 +59,9 @@ Queue *Q_curr;
 Queue *Q_orighead; // For config tracking
 
 /*Functions*/
-int blockHeuristic(Car carArray [], int goalX, int goalY);
-bool isGoalState(Car *mainCar, int goalX, int goalY);
+void setGoalCoor(Car mainCar);
+int blockHeuristic(Car carArray []);
+bool isGoalState(Car *mainCar);
 void initGrid();
 void printGrid();
 void insertToGrid(Car *car);

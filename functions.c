@@ -42,11 +42,22 @@ ssize_t getline(char **linep, size_t *n, FILE *fp){
 }
 /*END remove this block before passing; for windows only; copy pasted from the net END*/
 
+void setGoalCoor(Car mainCar){
+  if(mainCar.orientation == 'v'){
+    goalX = mainCar.coor.x;
+    goalY = matrixSize;
+  }
+  else{
+    goalY = mainCar.coor.y;
+    goalX = matrixSize;
+  }
+}
+
 int zeroHeuristic(){
   return 0;
 }
 
-int blockHeuristic(Car carArray [], int goalX, int goalY){
+int blockHeuristic(Car carArray []){
   int heuristic = 1;
   int carsBlocking = 0;
   int i;
@@ -93,7 +104,7 @@ int advanceHeuristic(){
   Returns: True, if it has reached goal state
            else, false
 */
-bool isGoalState(Car *mainCar, int goalX, int goalY){
+bool isGoalState(Car *mainCar){
   if((mainCar->orientation == 'v') && ((mainCar->coor.y + mainCar->length - 1) >= goalY)){
     if((mainCar->coor.y + mainCar->length - 1) > goalY) printf("Car exceeded goal point.");
     return true;
@@ -579,8 +590,8 @@ void BFS(Node *currNode){// make queue
     printf("+***+ Current node is NULL so no more node to BFS\n");
 }
 
-void aStar(Node *node){
-  CarUp(node->carArray, 4);  
+void aStar(Node *currNode){
+  int i;
 }
 
 void makeRoot(Car carArray[]){
