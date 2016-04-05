@@ -62,7 +62,7 @@ int blockHeuristic(Car carArray [], int goalX, int goalY){
       }
     }
     else{
-      if(carArray[i].orientation == 'h'){ // vertical yung goal car
+      if(carArray[i].orientation == 'v'){ // vertical yung goal car
         if((carArray[0].coor.y + carArray[0].length - 1) < carArray[i].coor.x){ // kung nasa baba ng goal car yung ith car
           if(carArray[i].coor.x <= goalX && (carArray[i].coor.x + carArray[i].length - 1) >= goalX){
             carsBlocking++;
@@ -93,13 +93,29 @@ int advanceHeuristic(){
   Returns: True, if it has reached goal state
            else, false
 */
-bool isGoalState(Car *mainCar, int goalX, int goalY){
-  if((mainCar->orientation == 'v') && ((mainCar->coor.y + mainCar->length - 1) >= goalY)){
+/*bool isGoalState(Car *mainCar, int goalX, int goalY){
+  if((mainCar->orientation == 'h') && ((mainCar->coor.y + mainCar->length - 1) >= goalY)){//from v to h
     if((mainCar->coor.y + mainCar->length - 1) > goalY) printf("Car exceeded goal point.");
     return true;
   }
-  if((mainCar->orientation == 'h') && ((mainCar->coor.x + mainCar->length - 1) >= goalX)){
-    if((mainCar->coor.x + mainCar->length - 1) > goalX) printf("Car exceeded goal point.");
+  if((mainCar->orientation == 'v') && ((mainCar->coor.x + mainCar->length - 1) >= goalX)){//from h to v
+    if((mainCar->coor.x + mainCar->length - 1) > goalX){
+      printf("Car exceeded goal point.");
+    }
+    return true;
+  }
+  else return false;
+}*/
+
+bool isGoalState(Car mainCar, int goalX, int goalY){
+  if((mainCar.orientation == 'v') && ((mainCar.coor.y + mainCar.length - 1) >= goalY)){
+    if((mainCar.coor.y + mainCar.length - 1) > goalY) printf("Car exceeded goal point.");
+    return true;
+  }
+  if((mainCar.orientation == 'h') && ((mainCar.coor.x + mainCar.length - 1) >= goalX)){
+    if((mainCar.coor.x + mainCar.length - 1) > goalX){
+      printf("Car exceeded goal point.");
+    }
     return true;
   }
   else return false;
@@ -208,6 +224,7 @@ void getFile(FILE *fp){
         copy_idtemp = id_temp;
     }
     numberOfCars = id_temp-1;
+    printf("Number of cars: %d\n",numberOfCars);
   free(line);
 
   if (feof(fp))
@@ -220,7 +237,7 @@ void getFile(FILE *fp){
 void createCarArray(Car* carList){
   int i;
   curr1 = head; 
-  for(i=0;i<matrixSize;i+=1){
+  for(i=0;i<numberOfCars;i+=1){
     carList[i] = *curr1;
     printf("Create Car Array fxn %d\n",carList[i].id);
     curr1 = curr1->next;
@@ -263,6 +280,7 @@ bool CarCheck(int startx, int starty, Car carArray[], int car){
   int endx,endy, orientation=carArray[car].orientation,  size=carArray[car].length; 
   
   //checks if value of head belongs to range of matrix
+
   if(startx >= matrixSize || starty >= matrixSize || startx <  0 || starty <0){
     check = 2;
     return false;
@@ -287,13 +305,9 @@ bool CarCheck(int startx, int starty, Car carArray[], int car){
   for(i=0; i<numberOfCars; i++){//from i<=numberOfCars
     if(car==i)
       i++;
-    if(i==numberOfCars){//when car to be compared is the last car
-      return false;
-    }
+    if(i==numberOfCars) break;
     check=CoorComp(startx, starty, orientation, size, carArray[i].coor.x, carArray[i].coor.y, carArray[i].orientation, carArray[i].length);
-    if(check==2){
-      return false;
-    }
+    if(check==2) return false;
    }
    return true;
 }
@@ -301,8 +315,8 @@ bool CarCheck(int startx, int starty, Car carArray[], int car){
 int CarUp(Car carArray[], int car){
   int copy = carArray[car].coor.x;
   copy--;
-  if(carArray[car].orientation==104)
-    return 0;
+  // if(carArray[car].orientation==104)
+  //   return 0;
 
   if(CarCheck(copy, carArray[car].coor.y, carArray, car) == true){
     printf("1 Move UP\n");
@@ -543,35 +557,46 @@ void BFS(Node *currNode){// make queue
   if(currNode!=NULL){
     for(i=0;i<numberOfCars;i++){//check allprintf allowed moves per car (U/D,L/R)
       printf("+++++++++++++++++++++Checking allowed moves for Car %d+++++++++++++++++++++\n",currNode->carArray[i].id);
-      if(CarUp(currNode->carArray,i)==1){//if UP move valid
-        carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
-        CopyCar(currNode->carArray, carArray);
-        moveUp(carArray,i);
-        newNode=makeNewNode(carArray, currNode);
-        push(newNode);
+      if(currNode->carArray[i].orientation==118){
+        if(CarUp(currNode->carArray,i)==1){//if UP move valid
+          carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
+          CopyCar(currNode->carArray, carArray);
+          moveUp(carArray,i);
+          if(configExists(currNode->carArray)) break;
+          newNode=makeNewNode(carArray, currNode);
+          push(newNode);
+        }
+        if(CarDown(currNode->carArray,i)==1){//if DOWN move valid
+          carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
+          CopyCar(currNode->carArray, carArray);
+          moveDown(carArray,i);
+          if(configExists(currNode->carArray)) break;
+          newNode=makeNewNode(carArray, currNode);
+          push(newNode);
+        }
       }
-      if(CarDown(currNode->carArray,i)==1){//if DOWN move valid
-        carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
-        CopyCar(currNode->carArray, carArray);
-        moveDown(carArray,i);
-        newNode=makeNewNode(carArray, currNode);
-        push(newNode);
-      }
-      if(CarLeft(currNode->carArray,i)==1){//if UP move valid
-        carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
-        CopyCar(currNode->carArray, carArray);
-        moveLeft(carArray,i);
-        newNode=makeNewNode(carArray, currNode);
-        push(newNode);
-      }
+      else if(currNode->carArray[i].orientation==104){
+        if(CarLeft(currNode->carArray,i)==1){//if UP move valid
+          carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
+          CopyCar(currNode->carArray, carArray);
+          moveLeft(carArray,i);
+          if(configExists(carArray)==false){
+            newNode=makeNewNode(carArray, currNode);
+            push(newNode);
+          }
+        }
 
-      if(CarRight(currNode->carArray,i)==1){//if UP move valid
-        carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
-        CopyCar(currNode->carArray, carArray);
-        moveRight(carArray,i);
-        newNode=makeNewNode(carArray, currNode);
-        push(newNode);
+        if(CarRight(currNode->carArray,i)==1){//if UP move valid
+          carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
+          CopyCar(currNode->carArray, carArray);
+          moveRight(carArray,i);
+          if(configExists(carArray)==false){
+            newNode=makeNewNode(carArray, currNode);
+            push(newNode);
+          }
+        }
       }
+      
 
     }
   }
@@ -593,8 +618,8 @@ void makeRoot(Car carArray[]){
   rootNode->currCost=0;
   rootNode->carArray = carArray;
   createCarArray(rootNode->carArray);
-  
-  for(i=0;i<matrixSize;i++){
+
+  for(i=0;i<numberOfCars;i++){
     printf("CAR ARRAY ID #%d (%d,%d)\n", rootNode->carArray[i].id,rootNode->carArray[i].coor.x,rootNode->carArray[i].coor.y);
   }
 
@@ -604,12 +629,20 @@ void makeRoot(Car carArray[]){
 //   printf("mAKE ROOT PIECE OF SHIT");
 }
 
-void BFStree(){
-  BFS(pop());
+void BFStree(Car carArray[]){
+  int i;
+  //BFS(pop());
+  //printf("mainCar's coordinates (%d,%d)\n",head)
 
-  //bool isGoalState(Car *mainCar, int goalX, int goalY){
-  /*while(isGoalState(head,2,5)==false){
-    BFS(pop());
-  }*/
+  Node *temp;
+  temp = pop();
+  BFS(temp);
+  printf("MainCar (%d,%d)\n",temp->carArray[0].coor.x,temp->carArray[0].coor.y);
+  for(i=0;i<40;i++){
+    temp = pop();
+    BFS(temp);
+    printf("(%d,%d) to (%d,%d) \n",temp->parent->carArray[0].coor.x,temp->parent->carArray[0].coor.y,carArray[0].coor.x,temp->carArray[0].coor.y); 
+  }
+  
 }
 

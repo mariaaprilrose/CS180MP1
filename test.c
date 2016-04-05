@@ -19,7 +19,6 @@ int main () {
     fp = fopen("a.txt", "r");
     getFile(fp);
     Car carArray[numberOfCars];
-
     makeRoot(carArray);
     
     // if(i==matrixSize){
@@ -29,7 +28,7 @@ int main () {
     printf("\n");
     printGrid();
     //aStar(n_curr);
-    BFStree();
+    BFStree(carArray);
     fclose(fp);
     return 0;
 }

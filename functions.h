@@ -58,7 +58,8 @@ Queue *Q_orighead; // For config tracking
 
 /*Functions*/
 int blockHeuristic(Car carArray [], int goalX, int goalY);
-bool isGoalState(Car *mainCar, int goalX, int goalY);
+//bool isGoalState(Car *mainCar, int goalX, int goalY);
+bool isGoalState(Car mainCar, int goalX, int goalY);
 void initGrid();
 void printGrid();
 void insertToGrid(Car *car);
@@ -80,4 +81,5 @@ void printQ();
 bool configExists(Car carArray[]);
 void insert(Node *node);
 void BFS();
-void makeRoot(Car carList[]);
+void makeRoot(Car carArray[]);
+void BFStree(Car carArray[]);
