@@ -20,7 +20,8 @@ int main () {
     getFile(fp);
     Car carArray[numberOfCars];
     makeRoot(carArray);
-    
+    setGoalCoor(carArray[0]);
+
     // if(i==matrixSize){
     //   Car newCarArray = 
     // }

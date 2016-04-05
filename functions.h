@@ -41,11 +41,13 @@ int matrixSize;
 char arrayField[10][10];
 int copy_idtemp;
 int numberOfCars;
+int goalX;
+int goalY;
 Car *TempCar;
 Car *head;
 Car *curr1;
 Car *curr2;
-Car *carArray;
+Car *cars;
 Node *tempNode;
 
 Node *n_head;
@@ -57,9 +59,10 @@ Queue *Q_curr;
 Queue *Q_orighead; // For config tracking
 
 /*Functions*/
-int blockHeuristic(Car carArray [], int goalX, int goalY);
-//bool isGoalState(Car *mainCar, int goalX, int goalY);
-bool isGoalState(Car mainCar, int goalX, int goalY);
+void setGoalCoor(Car mainCar);
+int blockHeuristic(Car carArray []);
+int advanceHeuristic(Car carArray[]);
+bool isGoalState(Car mainCar);
 void initGrid();
 void printGrid();
 void insertToGrid(Car *car);
@@ -73,11 +76,12 @@ int CarDown(Car carArray[], int car);
 int CarLeft(Car carArray[], int car);
 int CarRight(Car carArray[], int car);
 void CopyCar(Car array1[], Car array2[]);
-void aStar(Node *node);
+bool aStar(Node *node);
 Node* initState(Node* state,int lvl, int heur, int cost, int id, int x, int y);
 void push(Node *pointer);//, int data);
 Node* pop();
 void printQ();
+Node* makeNewNode(Car carArray[], Node *parent, int type);
 bool configExists(Car carArray[]);
 void insert(Node *node);
 void BFS();
