@@ -11,15 +11,20 @@
 int main () {
 
     FILE *fp;
+    Node *rootNode;
     int field[100][100];
     char buff[255];
     int i;
+
     Q_head = NULL;
     Q_curr = NULL;
+    Q_orighead = NULL;
     fp = fopen("a.txt", "r");
     getFile(fp);
+    
     Car carArray[numberOfCars];
-    makeRoot(carArray);
+
+    rootNode = makeRoot(carArray);
     setGoalCoor(carArray[0]);
 
     // if(i==matrixSize){
@@ -28,8 +33,15 @@ int main () {
     printf("\nmatrix limit %d\n", matrixSize);
     printf("\n");
     printGrid();
-    //aStar(n_curr);
-    BFStree(carArray);
+    //push(rootNode); // for bfs
+    //BFStree(carArray);
+    printf("NUMBER OF CARS: %d\n", numberOfCars);
+    freeQueues();
+    Q_head = NULL;
+    Q_curr = NULL;
+    Q_orighead = NULL;
+    insert(rootNode); // for astar
+    aStarTree();
     fclose(fp);
     return 0;
 }

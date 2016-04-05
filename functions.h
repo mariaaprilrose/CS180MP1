@@ -59,6 +59,7 @@ Queue *Q_curr;
 Queue *Q_orighead; // For config tracking
 
 /*Functions*/
+void freeQueues();
 void setGoalCoor(Car mainCar);
 int blockHeuristic(Car carArray []);
 int advanceHeuristic(Car carArray[]);
@@ -85,5 +86,5 @@ Node* makeNewNode(Car carArray[], Node *parent, int type);
 bool configExists(Car carArray[]);
 void insert(Node *node);
 void BFS();
-void makeRoot(Car carArray[]);
+Node* makeRoot(Car carArray[]);
 void BFStree(Car carArray[]);
