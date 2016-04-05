@@ -227,8 +227,11 @@ void createCarArray(Car* carList){
   }
 }
 
+//compares coordinates of two cars
 int CoorComp(int x, int y, int coor1, int size1, int x2, int y2, int coor2, int size2){
   int i,j, copy_x=x,copy_y=y,copy_x2=x2,copy_y2=y2;
+  //CoorComp(startx, starty, orientation, size, carArray[i].coor.x, 
+  //         carArray[i].coor.y, carArray[i].orientation, carArray[i].length);
   for(i=0; i<size1; i++){
     if (coor1 == 104){
       y=copy_y;
@@ -239,15 +242,16 @@ int CoorComp(int x, int y, int coor1, int size1, int x2, int y2, int coor2, int 
       x=x+i;
     }
     for(j=0; j<size2; j++){
-      if (coor1 == 104){
+      if (coor2 == 104){
         y2=copy_y2;
         y2=y2+j;
+        
       }
-      else if(coor1==118){
+      else if(coor2==118){
         x2=copy_x2;
         x2=x2+j;
       }
-      if (x==x2 || y==y2)
+      if (x==x2 && y==y2)
         return 2;
     }
   }
@@ -255,26 +259,27 @@ int CoorComp(int x, int y, int coor1, int size1, int x2, int y2, int coor2, int 
 }
 
 bool CarCheck(int startx, int starty, Car carArray[], int car){
-  //what is passed from CarUp: CarCheck(copy, carArray[car].coor.y, carArray, car)
   int check = 1, i;
   int endx,endy, orientation=carArray[car].orientation,  size=carArray[car].length; 
-  printf("++++++++++++BOOL CARCHECK+++++++++++++\n");
-  printf("Startx:%d Starty:%d Orientation:%d Size:%d\n", startx, starty, orientation, size );
+  
   //checks if value of head belongs to range of matrix
-  if(startx >= matrixSize || starty >=matrixSize || startx <  0 || starty <0)
+  if(startx >= matrixSize || starty >= matrixSize || startx <  0 || starty <0){
     check = 2;
-
-  if (orientation==104){
+    return false;
+  }
+  
+  if (orientation==118){
     endx= startx + (size-1);
-    if(endx >= matrixSize || endx < 0)
+    if(endx >= matrixSize || endx < 0){
       check = 2;
+      return false;
+    }
   }      
-  else if (orientation=118){
+  else if (orientation==104){
     endy= starty + (size-1);
-    printf("Startx:%d Starty:%d Orientation:%d Size:%d\n", startx, starty, orientation, size );
     if(endy>= matrixSize || endy < 0){
       check = 2;
-      printf("Vertical Check 1: %d Car ID: %d \n",check,carArray[car].id);
+      return false;
     }
   }    
 
@@ -282,16 +287,15 @@ bool CarCheck(int startx, int starty, Car carArray[], int car){
   for(i=0; i<numberOfCars; i++){//from i<=numberOfCars
     if(car==i)
       i++;
+    if(i==numberOfCars){//when car to be compared is the last car
+      return false;
+    }
     check=CoorComp(startx, starty, orientation, size, carArray[i].coor.x, carArray[i].coor.y, carArray[i].orientation, carArray[i].length);
-    //printf("Vertical Check 2: %d Car ID: %d \n",check,carArray[i].id);
-  }
-
-
-  printf("Check: %d\n", check);
-  if(check!=1)
-    return false;
-  return true; 
-  
+    if(check==2){
+      return false;
+    }
+   }
+   return true;
 }
 
 int CarUp(Car carArray[], int car){
@@ -301,12 +305,10 @@ int CarUp(Car carArray[], int car){
     return 0;
 
   if(CarCheck(copy, carArray[car].coor.y, carArray, car) == true){
-    printf("from %d to %d: UP is TRUE\n",carArray[car].coor.x,copy);
-    printf("UP is TRUE\n");
+    printf("1 Move UP\n");
     return 1;
   }
   else{
-    printf("from %d to %d: UP is FALSE\n", carArray[car].coor.x,copy);
     return 0;
   }
 }
@@ -318,11 +320,10 @@ int CarDown(Car carArray[], int car){
     return 0;
 
   if(CarCheck(copy, carArray[car].coor.y, carArray, car) == true){
-    printf("DOWN is TRUE\n");
+    printf("1 Move DOWN\n");
     return 1;
   }
   else{
-    printf("DOWN is FALSE\n");
     return 0;
   }
 }
@@ -333,12 +334,12 @@ int CarLeft(Car carArray[], int car){
 
   if(carArray[car].orientation==118)
     return 0;
+
   if(CarCheck(carArray[car].coor.x, copy, carArray, car) == true){
-    printf("LEFT is TRUE\n");
+    printf("1 Move LEFT\n");
     return 1;
   }
   else{
-    printf("LEFT is FALSE\n");
     return 0;
   }
 }
@@ -351,11 +352,10 @@ int CarRight(Car carArray[], int car){
     return 0;
   
   if(CarCheck(carArray[car].coor.x, copy, carArray, car) == true){
-    printf("RIGHT is TRUE\n");
+    printf("1 Move RIGHT\n");
     return 1;
   }
   else{
-    printf("RIGHT is FALSE\n");
     return 0;
   }
 }
@@ -363,10 +363,7 @@ int CarRight(Car carArray[], int car){
 
 
 void CopyCar(Car array1[], Car array2[]){
-//not sure if fucking right :))
   int i;
- // printf("%s\n", array1);
-//  printf("%ld\n", sizeof(array1)/sizeof(int));
   for(i=0; i<=(sizeof(array1)/sizeof(array1[0])); i++){
     printf("%c\n", array1[i].id);
     //array2[i]=(Car*)malloc(sizeof(Car));
@@ -396,7 +393,7 @@ void push(Node *pointer){//, int data){
       Q_curr = Q_head;
   }
   else{
-    printf("I CAN PUSH BITCH\n");
+    printf("I CAN PUSH\n");
       Q_curr->next = (Queue*)malloc(sizeof(Queue));
       Q_curr = Q_curr->next;
       Q_curr->ptr = pointer;
@@ -409,28 +406,13 @@ void push(Node *pointer){//, int data){
 Node* pop(){//EDIT: this is copy pasted from internet
   Queue *pointer;
   
-  // if (Q_head==NULL){
-  //   printf("WALANG LAMAN BITCH\n");   
-  // }
-  // else{
-  //   printf("++++ Q HEAD %d\n", Q_head->ptr->level);
-  //   // pointer = Q_curr;
-  //   // pointer = Q_curr->next;
-  //   // // // printf("++++ Q HEAD %d\n", pointer->next->ptr->carArray[0].id);
-  //   // // pointer=pointer->next;
-  //   // // Q_head=Q_head->next;
-  //   // //pointer = Q_head->next;
-  
   pointer = Q_head;
   Q_head = Q_head->next;
   if(Q_head==NULL){
-    //printf("++++ Q HEAD %d\n",Q_head->ptr->level);
-    printf("WALANG LAMAN BITCH\n");
+    // printf("WALANG LAMAN BITCH\n");
     Q_curr = NULL;
   }
   else{
-    //  Q_curr = Q_head;
-    //pointer->next = NULL; // Commented out this line to be able to keep whole Queue even after popping (for config checking)
   }
   printf("++++ BEFORE RETURN POINTER->PTR->LEVEL IS %d\n",pointer->ptr->level);
   return pointer->ptr;
@@ -526,30 +508,30 @@ void insert(Node *node){
 }
 
 void moveUp(Car carArray[], int index){//struct
-  printf("BE4 id: %d, coordinate: %d\n", carArray[index].id, carArray[index].coor.x);
+  //printf("BE4 id: %d, coordinate: %d\n", carArray[index].id, carArray[index].coor.x);
   carArray[index].coor.x--;
-  printf("AFTER id: %d, coordinate: %d\n", carArray[index].id, carArray[index].coor.x);
+  //printf("AFTER id: %d, coordinate: %d\n", carArray[index].id, carArray[index].coor.x);
   
 }
 
 void moveDown(Car carArray[], int index){//struct
-  printf("BE4 id: %d, coordinate: %d\n", carArray[index].id, carArray[index].coor.x);
+  //printf("BE4 id: %d, coordinate: %d\n", carArray[index].id, carArray[index].coor.x);
   carArray[index].coor.x++;
-  printf("AFTER id: %d, coordinate: %d\n", carArray[index].id, carArray[index].coor.x);
+  //printf("AFTER id: %d, coordinate: %d\n", carArray[index].id, carArray[index].coor.x);
   
 }
 
 void moveLeft(Car carArray[], int index){//struct
-  printf("BE4 id: %d, coordinate: %d\n", carArray[index].id, carArray[index].coor.x);
+  //printf("BE4 id: %d, coordinate: %d\n", carArray[index].id, carArray[index].coor.x);
   carArray[index].coor.y--;
-  printf("AFTER id: %d, coordinate: %d\n", carArray[index].id, carArray[index].coor.x);
+  //printf("AFTER id: %d, coordinate: %d\n", carArray[index].id, carArray[index].coor.x);
   
 }
 
 void moveRight(Car carArray[], int index){//struct
-  printf("BE4 id: %d, coordinate: %d\n", carArray[index].id, carArray[index].coor.x);
+  //printf("BE4 id: %d, coordinate: %d\n", carArray[index].id, carArray[index].coor.x);
   carArray[index].coor.y++;
-  printf("AFTER id: %d, coordinate: %d\n", carArray[index].id, carArray[index].coor.x);
+  //printf("AFTER id: %d, coordinate: %d\n", carArray[index].id, carArray[index].coor.x);
   
 }
 
@@ -557,44 +539,39 @@ void BFS(Node *currNode){// make queue
   int i,j;
   Node *newNode;
 
-/*  for(i=0;i<3;i++){
-    push(NULL, i);
-  }
-  printQ();*/
+
   if(currNode!=NULL){
     for(i=0;i<numberOfCars;i++){//check allprintf allowed moves per car (U/D,L/R)
-      printf("Checking allowed moves for Car %d\n",currNode->carArray[i].id);
-      if(CarUp(currNode->carArray,i)==1 ){//if UP move valid
+      printf("+++++++++++++++++++++Checking allowed moves for Car %d+++++++++++++++++++++\n",currNode->carArray[i].id);
+      if(CarUp(currNode->carArray,i)==1){//if UP move valid
         carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
         CopyCar(currNode->carArray, carArray);
         moveUp(carArray,i);
         newNode=makeNewNode(carArray, currNode);
         push(newNode);
       }
+      if(CarDown(currNode->carArray,i)==1){//if DOWN move valid
+        carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
+        CopyCar(currNode->carArray, carArray);
+        moveDown(carArray,i);
+        newNode=makeNewNode(carArray, currNode);
+        push(newNode);
+      }
+      if(CarLeft(currNode->carArray,i)==1){//if UP move valid
+        carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
+        CopyCar(currNode->carArray, carArray);
+        moveLeft(carArray,i);
+        newNode=makeNewNode(carArray, currNode);
+        push(newNode);
+      }
 
-      // if(CarDown(currNode->carArray,i)==1){//if DOWN move valid
-      //   carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
-      //   CopyCar(currNode->carArray, carArray);
-      //   moveDown(carArray,i);
-      //   newNode=makeNewNode(carArray, currNode);
-      //   push(newNode);
-      // }
-
-      // if(CarLeft(currNode->carArray,i)==1){//if UP move valid
-      //   carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
-      //   CopyCar(currNode->carArray, carArray);
-      //   moveLeft(carArray,i);
-      //   newNode=makeNewNode(carArray, currNode);
-      //   push(newNode);
-      // }
-
-      // if(CarDown(currNode->carArray,i)==1){//if UP move valid
-      //   carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
-      //   CopyCar(currNode->carArray, carArray);
-      //   moveUp(carArray,i);
-      //   newNode=makeNewNode(carArray, currNode);
-      //   push(newNode);
-      // }
+      if(CarRight(currNode->carArray,i)==1){//if UP move valid
+        carArray = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
+        CopyCar(currNode->carArray, carArray);
+        moveRight(carArray,i);
+        newNode=makeNewNode(carArray, currNode);
+        push(newNode);
+      }
 
     }
   }
@@ -616,15 +593,23 @@ void makeRoot(Car carArray[]){
   rootNode->currCost=0;
   rootNode->carArray = carArray;
   createCarArray(rootNode->carArray);
-
-  printf("\n");
+  
   for(i=0;i<matrixSize;i++){
     printf("CAR ARRAY ID #%d (%d,%d)\n", rootNode->carArray[i].id,rootNode->carArray[i].coor.x,rootNode->carArray[i].coor.y);
   }
 
-  /*n_head = rootNode;
-  n_curr = n_head;
-*/push(rootNode);
-  printf("mAKE ROOT PIECE OF SHIT");
+  // n_head = rootNode;
+  // n_curr = n_head;
+  push(rootNode);
+//   printf("mAKE ROOT PIECE OF SHIT");
+}
+
+void BFStree(){
+  BFS(pop());
+
+  //bool isGoalState(Car *mainCar, int goalX, int goalY){
+  /*while(isGoalState(head,2,5)==false){
+    BFS(pop());
+  }*/
 }
 

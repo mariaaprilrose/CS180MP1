@@ -28,9 +28,8 @@ int main () {
     printf("\nmatrix limit %d\n", matrixSize);
     printf("\n");
     printGrid();
-    printf("\nJust Printed GRID Shit");
     //aStar(n_curr);
-    BFS(pop());
+    BFStree();
     fclose(fp);
     return 0;
 }
