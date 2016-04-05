@@ -565,7 +565,7 @@ void BFS(Node *currNode){// make queue
           CopyCar(currNode->carArray, cars);
           moveUp(cars,i);
           if(configExists(cars)==false){
-            newNode=makeNewNode(cars, currNode);
+            newNode=makeNewNode(cars, currNode,1);
             push(newNode);
           }
         }
@@ -574,7 +574,7 @@ void BFS(Node *currNode){// make queue
           CopyCar(currNode->carArray, cars);
           moveDown(cars,i);
           if(configExists(cars)==false){
-            newNode=makeNewNode(cars, currNode);
+            newNode=makeNewNode(cars, currNode,1);
             push(newNode);
           }
         } 
@@ -585,7 +585,7 @@ void BFS(Node *currNode){// make queue
           CopyCar(currNode->carArray, cars);
           moveLeft(cars,i);
           if(configExists(cars)==false){
-            newNode=makeNewNode(cars, currNode);
+            newNode=makeNewNode(cars, currNode,1);
             push(newNode);
           }
         }
@@ -595,7 +595,7 @@ void BFS(Node *currNode){// make queue
           CopyCar(currNode->carArray, cars);
           moveRight(cars,i);
           if(configExists(cars)==false){
-            newNode=makeNewNode(cars, currNode);
+            newNode=makeNewNode(cars, currNode,1);
             push(newNode);
           }
         }
