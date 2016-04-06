@@ -57,11 +57,11 @@ void freeQueues(){
 void setGoalCoor(Car mainCar){
   if(mainCar.orientation == 'v'){
     goalX = mainCar.coor.x;
-    goalY = matrixSize;
+    goalY = matrixSize-1;
   }
   else{
     goalY = mainCar.coor.y;
-    goalX = matrixSize;
+    goalX = matrixSize-1;
   }
 }
 
@@ -117,11 +117,15 @@ int advanceHeuristic(Car carArray[]){
            else, false
 */
 bool isGoalState(Car mainCar){
+  //printf("%c Y:%d GoalY:%d Length:%d\n",mainCar.orientation,mainCar.coor.y,mainCar.length-1);
+  //printf("%c X:%d GoalX:%d Length:%d\n",mainCar.orientation,mainCar.coor.x,goalX,mainCar.length-1);
   if((mainCar.orientation == 'v') && ((mainCar.coor.y + mainCar.length - 1) >= goalY)){
+    //printf("%c Y:%d GoalY:%d Length:%d\n",mainCar.orientation,mainCar.coor.y,goalY,mainCar.length-1);
     if((mainCar.coor.y + mainCar.length - 1) > goalY) printf("Car exceeded goal point.");
     return true;
   }
   if((mainCar.orientation == 'h') && ((mainCar.coor.x + mainCar.length - 1) >= goalX)){
+    //printf("%c X:%d GoalX:%d Length:%d\n",mainCar.orientation,mainCar.coor.x,goalX,mainCar.length-1);
     if((mainCar.coor.x + mainCar.length - 1) > goalX) printf("Car exceeded goal point.");
     return true;
   }
@@ -157,13 +161,13 @@ void insertToGrid(Car *car){
   int i,ctr;
   
   if(car->orientation==104){ //h
-    for(i = car->coor.y,ctr=0;ctr<car->length;i+=1,ctr+=1){
-      arrayField[car->coor.x][i] = 'H';
+    for(i = car->coor.x,ctr=0;ctr < car->length;i+=1,ctr+=1){
+      arrayField[car->coor.y][i] = 'H';
     }
   }
   else if(car->orientation==118){
-    for(i = car->coor.x,ctr=0;ctr<car->length;i+=1,ctr+=1){
-      arrayField[i][car->coor.y] = 'V';
+    for(i = car->coor.y,ctr=0;ctr<car->length;i+=1,ctr+=1){
+      arrayField[i][car->coor.x] = 'V';
     }
   }
 
@@ -755,10 +759,15 @@ void BFStree(Car carArray[]){
   temp = pop();
   BFS(temp);
   printf("MainCar (%d,%d)\n",temp->carArray[0].coor.x,temp->carArray[0].coor.y);
-  for(i=0;i<40;i++){
+  // for(i=0;i<40;i++){
+  //   temp = pop();
+  //   BFS(temp);
+  //   printf("(%d,%d) to (%d,%d) \n",temp->parent->carArray[0].coor.x,temp->parent->carArray[0].coor.y,carArray[0].coor.x,temp->carArray[0].coor.y); 
+  // }
+  while(isGoalState(temp->carArray[0])==false){
     temp = pop();
     BFS(temp);
-    printf("(%d,%d) to (%d,%d) \n",temp->parent->carArray[0].coor.x,temp->parent->carArray[0].coor.y,carArray[0].coor.x,temp->carArray[0].coor.y); 
+    printf("MainCar (%d,%d)\n",temp->carArray[0].coor.x,temp->carArray[0].coor.y);
   }
   
 }

@@ -41,7 +41,8 @@ int main () {
     Q_curr = NULL;
     Q_orighead = NULL;
     insert(rootNode); // for astar
-    aStarTree();
+    //aStarTree();
+    BFStree(carArray);
     fclose(fp);
     return 0;
 }
