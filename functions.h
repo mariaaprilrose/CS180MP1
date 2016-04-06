@@ -46,6 +46,7 @@ struct stack{
 Node *node_head;
 
 /*Global Vasiables*/
+FILE *fp, *out;
 int matrixSize;
 char arrayField[10][10];
 int copy_idtemp;

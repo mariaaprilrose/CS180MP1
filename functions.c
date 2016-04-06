@@ -255,6 +255,7 @@ void printOutput(int carMoved, char moveDir, Node *parent){
     else{
       if(moveCtr != 0){
         printf("%d %c %d\n", prevCarMoved, prevMoveDir, moveCtr);
+        fprintf(out, "%d %c %d\n", prevCarMoved, prevMoveDir, moveCtr);
         prevCarMoved = S_top->carMoved;
         prevMoveDir = S_top->moveDir;
         moveCtr = 1; 
@@ -272,6 +273,7 @@ void printOutput(int carMoved, char moveDir, Node *parent){
   }
 
   printf("%d %c %d", prevCarMoved, prevMoveDir, moveCtr);
+  fprintf(out, "%d %c %d\n", prevCarMoved, prevMoveDir, moveCtr);
 }
 
 int cost(){
@@ -776,8 +778,11 @@ bool BFS(Node *currNode){// make queue
           moveLeft(cars,i);
 
           if(isGoalState(cars[0])){
-            printf("Reached goal state\n");
+            printf("Reachd goal state\n");
+            fprintf(out, "Reachd goal state\n");
             printOutput(i+1, 'L', currNode);
+            
+            //fprintf(out, "Integer: %d, float: %f\n", i, py);
             return true;
           }
 
@@ -967,7 +972,8 @@ void BFStree(Car carArray[]){
     if(goalReached == false) node = pop();
   }
   if(goalReached == true){
-    printf("Goal reached @ level %d\n", (node->level+1));
+    printf("\nGoal reached @ level %d\n", (node->level+1));
+    fprintf(out, "\nGoal reached @ level %d\n", (node->level+1));
     return;
   }
   if(node == NULL) printf("No solution reached.\n");

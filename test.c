@@ -11,13 +11,14 @@
 int main () {
     clock_t begin, end;
     double time_spent;
-    FILE *fp;
+    
     Node *rootNode;
     int field[100][100];
     char buff[255];
     int i;
 
     fp = fopen("a.txt", "r");
+    out = fopen("Output.txt", "w");
     getFile(fp);
     
     Car carArray[numberOfCars];
@@ -25,10 +26,12 @@ int main () {
     rootNode = makeRoot(carArray);
     setGoalCoor(carArray[0]);
 
-    /*Q_head = NULL;
+    
+    Q_head = NULL;
     Q_curr = NULL;
     Q_orighead = NULL;
     printf("1) BFS\n");
+    fprintf(out,"1) BFS\n");
     popCtr = 0;
     push(rootNode); // for bfs
     begin = clock();
@@ -36,11 +39,14 @@ int main () {
     end = clock();
     time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
     printf("Expanded %d nodes\n",popCtr);
+    fprintf(out,"Expanded %d nodes\n",popCtr);
     printf("Time spent: %f seconds\n",time_spent);
-    freeQueues(); */
+    fprintf(out,"Time spent: %f seconds\n",time_spent);
+    freeQueues(); 
 
     
-    /*printf("2) A* with blocking heuristic\n");
+    printf("2) A* with blocking heuristic\n");
+    fprintf(out,"2) A* with blocking heuristic\n");
     Q_head = NULL;
     Q_curr = NULL;
     Q_orighead = NULL;
@@ -51,10 +57,13 @@ int main () {
     end = clock();
     time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
     printf("Expanded %d nodes\n",popCtr);
+    fprintf(out,"Expanded %d nodes\n",popCtr);
     printf("Time spent: %f seconds\n",time_spent);
-    freeQueues(); */
+    fprintf(out,"Time spent: %f seconds\n",time_spent);
+    freeQueues(); 
 
-    printf("3) A* with advance heuristic\n");   
+    printf("3) A* with advance heuristic\n");
+    fprintf(out,"3) A* with advance heuristic\n");
     Q_head = NULL;
     Q_curr = NULL;
     Q_orighead = NULL;
@@ -66,7 +75,9 @@ int main () {
     end = clock();
     time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
     printf("Expanded %d nodes\n",popCtr);
+    fprintf(out, "Expanded %d nodes\n",popCtr);
     printf("Time spent: %f seconds\n",time_spent);
+    fprintf(out, "Time spent: %f seconds\n",time_spent);
 
     fclose(fp);
     return 0;
