@@ -20,6 +20,8 @@ struct node{
   //GridState *state;
   Node *parent;
   Node **children;
+  int carMoved;
+  char moveDir;
   int level;
   int currHeuristic;
   int currCost;
@@ -32,6 +34,13 @@ struct queue{
   Queue *next;
   int laman;
   Node *ptr;
+};
+
+typedef struct stack Stack;
+struct stack{
+  Stack *next;
+  int carMoved;
+  char moveDir;
 };
 
 Node *node_head;
@@ -58,12 +67,15 @@ Queue *Q_head;
 Queue *Q_curr;
 Queue *Q_orighead; // For config tracking
 
+Stack *S_top;
+
 /*Functions*/
 void freeQueues();
 void setGoalCoor(Car mainCar);
 int blockHeuristic(Car carArray []);
 int advanceHeuristic(Car carArray[]);
 bool isGoalState(Car mainCar);
+void printOutput(int carMoved, char moveDir, Node *parent);
 void initGrid();
 void printGrid();
 void insertToGrid(Car *car);
@@ -82,7 +94,7 @@ Node* initState(Node* state,int lvl, int heur, int cost, int id, int x, int y);
 void push(Node *pointer);//, int data);
 Node* pop();
 void printQ();
-Node* makeNewNode(Car carArray[], Node *parent, int type);
+Node* makeNewNode(Car carArray[], Node *parent, int carMoved, char moveDir, int type);
 bool configExists(Car carArray[]);
 void insert(Node *node);
 bool BFS(Node *node);

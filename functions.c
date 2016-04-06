@@ -132,6 +132,63 @@ bool isGoalState(Car mainCar){
   else return false;
 }
 
+void printOutput(int carMoved, char moveDir, Node *parent){
+  Stack *temp;
+  Stack *newS;
+  Node *tempNode;
+
+  int prevCarMoved = -1;
+  char prevMoveDir = ' ';
+  int moveCtr = 0;
+  int i = 0;
+
+  /*Create Stack*/
+  temp = (Stack*)malloc(sizeof(Stack));
+  temp->carMoved = carMoved;
+  temp->moveDir = moveDir;
+  temp->next = NULL;
+  S_top = temp; 
+
+  tempNode = parent;
+  while(tempNode->parent != NULL){
+    temp = (Stack*)malloc(sizeof(Stack));
+    temp->carMoved = tempNode->carMoved;
+    temp->moveDir = tempNode->moveDir;
+    temp->next = S_top;
+    S_top = temp;
+
+    tempNode = tempNode->parent; 
+    i++;
+  }
+  printf("\n\n\nFinished creating stack length %d. Printing stack.\n\n", i);
+
+  /* Print Stack */
+  while(S_top != NULL){
+    if(prevCarMoved == S_top->carMoved && prevMoveDir == S_top->moveDir){
+      moveCtr++;
+    }
+    else{
+      if(moveCtr != 0){
+        printf("%d %c %d\n", prevCarMoved, prevMoveDir, moveCtr);
+        prevCarMoved = S_top->carMoved;
+        prevMoveDir = S_top->moveDir;
+        moveCtr = 1; 
+      }
+      else{
+        prevCarMoved = S_top->carMoved;
+        prevMoveDir = S_top->moveDir;
+        moveCtr = 1; 
+      }
+    }
+
+    temp = S_top;
+    S_top = S_top->next;
+    free(temp);
+  }
+
+  printf("%d %c %d", prevCarMoved, prevMoveDir, moveCtr);
+}
+
 int cost(){
   
 }
@@ -397,12 +454,13 @@ int CarRight(Car carArray[], int car){
 
 
 void CopyCar(Car array1[], Car array2[]){
-  int i;
-  for(i=0; i<=(sizeof(array1)/sizeof(array1[0])); i++){
+  int i, j;
+  for(i=0; i< numberOfCars; i++){
     //printf("i = %d\n", i);
     //printf("ID: %d\n", array1[i].id);
     //array2[i]=(Car*)malloc(sizeof(Car));
     array2[i]= array1[i];
+    printf("%d\n", i);
   }
 }
 
@@ -463,7 +521,7 @@ void printQ(){
 }
 
 
-Node* makeNewNode(Car carArray[], Node *parent, int type){
+Node* makeNewNode(Car carArray[], Node *parent, int carMoved, char moveDir, int type){
   Node *node = (Node*)malloc(sizeof(Node));
   node->parent = parent;
   node->children = NULL;
@@ -478,8 +536,10 @@ Node* makeNewNode(Car carArray[], Node *parent, int type){
 
   node->currCost = parent->currCost + 1;
   node->carArray = carArray;
+  node->carMoved = carMoved;
+  node->moveDir = moveDir;
 
-  //return node;
+  return node;
 }
 
 
@@ -597,10 +657,11 @@ bool BFS(Node *currNode){// make queue
 
           if(isGoalState(cars[0])){
             printf("Reached goal state\n");
+            printOutput(i+1, 'U', currNode);
             return true;
           }
           if(configExists(cars)==false){
-            newNode=makeNewNode(cars, currNode,1);
+            newNode=makeNewNode(cars, currNode, i+1, 'U', 1);
             push(newNode);
           }
         }
@@ -611,11 +672,12 @@ bool BFS(Node *currNode){// make queue
 
           if(isGoalState(cars[0])){
             printf("Reached goal state\n");
+            printOutput(i+1, 'D', currNode);
             return true;
           }
 
           if(configExists(cars)==false){
-            newNode=makeNewNode(cars, currNode,1);
+            newNode=makeNewNode(cars, currNode, i+1, 'D', 1);
             push(newNode);
           }
         } 
@@ -628,11 +690,12 @@ bool BFS(Node *currNode){// make queue
 
           if(isGoalState(cars[0])){
             printf("Reached goal state\n");
+            printOutput(i+1, 'L', currNode);
             return true;
           }
 
           if(configExists(cars)==false){
-            newNode=makeNewNode(cars, currNode,1);
+            newNode=makeNewNode(cars, currNode, i+1, 'L', 1);
             push(newNode);
           }
         }
@@ -644,11 +707,12 @@ bool BFS(Node *currNode){// make queue
 
           if(isGoalState(cars[0])){
             printf("Reached goal state\n");
+            printOutput(i+1, 'R', currNode);
             return true;
           }
 
           if(configExists(cars)==false){
-            newNode=makeNewNode(cars, currNode,1);
+            newNode=makeNewNode(cars, currNode, i+1, 'R', 1);
             push(newNode);
           }
         }
@@ -671,7 +735,6 @@ bool aStar(Node *currNode){
     for(i=0;i<numberOfCars;i++){//check allprintf allowed moves per car (U/D,L/R)
       //printf("+++++++++++++++++++++Checking allowed moves for Car %d+++++++++++++++++++++\n",currNode->carArray[i].id);
       printf("FOR CAR %d:\n", i);
-      printf("check up\n");
       if(CarUp(currNode->carArray,i)==1){//if UP move valid
         printf("Car %d: up\n",i);
         cars = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
@@ -680,16 +743,16 @@ bool aStar(Node *currNode){
 
         if(isGoalState(cars[0])){
           printf("Reached goal state\n");
+          printOutput(i+1, 'U', currNode);
           return true;
         }
         if(configExists(cars));
         else{
           printf("Added a new node: Car %d, move up\n", i);
-          newNode=makeNewNode(cars, currNode, 2);
+          newNode=makeNewNode(cars, currNode, i+1, 'U', 2);
           insert(newNode);
         }
       }
-      printf("check down\n");
       if(CarDown(currNode->carArray,i)==1){//if DOWN move valid
         printf("Car %d: down\n",i);
         cars = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
@@ -698,17 +761,17 @@ bool aStar(Node *currNode){
 
         if(isGoalState(cars[0])){
           printf("Reached goal state\n");
+          printOutput(i+1, 'D', currNode);
           return true;
         }
 
         if(configExists(cars));
         else{
           printf("Added a new node: Car %d, move down\n", i);
-          newNode=makeNewNode(cars, currNode, 2);
+          newNode=makeNewNode(cars, currNode, i+1, 'D', 2);
           insert(newNode);
         }
       }
-      printf("check left\n");
       if(CarLeft(currNode->carArray,i)==1){//if left move valid
         printf("Car %d: left\n",i);
         cars = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
@@ -717,17 +780,17 @@ bool aStar(Node *currNode){
         
         if(isGoalState(cars[0])){
           printf("Reached goal state\n");
+          printOutput(i+1, 'L', currNode);
           return true;
         }
 
         if(configExists(cars));
         else{
           printf("Added a new node: Car %d, move left\n", i);
-          newNode=makeNewNode(cars, currNode, 2);
+          newNode=makeNewNode(cars, currNode, i+1, 'L', 2);
           insert(newNode);
         }
       }
-      printf("check right\n");
       if(CarRight(currNode->carArray,i)==1){//if right move valid
         printf("Car %d: right\n",i);
         cars = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
@@ -736,13 +799,14 @@ bool aStar(Node *currNode){
         
         if(isGoalState(cars[0])){
           printf("Reached goal state\n");
+          printOutput(i+1, 'R', currNode);
           return true;
         }
 
         if(configExists(cars)) printf("config exists\n");
         else{
           printf("Added a new node: Car %d, move right\n", i);
-          newNode=makeNewNode(cars, currNode, 2);
+          newNode=makeNewNode(cars, currNode, i+1, 'R', 2);
           insert(newNode);
         }
       }
