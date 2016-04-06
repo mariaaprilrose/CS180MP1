@@ -52,6 +52,7 @@ int copy_idtemp;
 int numberOfCars;
 int goalX;
 int goalY;
+int popCtr;
 Car *TempCar;
 Car *head;
 Car *curr1;
@@ -68,6 +69,7 @@ Queue *Q_curr;
 Queue *Q_orighead; // For config tracking
 
 Stack *S_top;
+
 
 /*Functions*/
 void freeQueues();
@@ -89,10 +91,10 @@ int CarDown(Car carArray[], int car);
 int CarLeft(Car carArray[], int car);
 int CarRight(Car carArray[], int car);
 void CopyCar(Car array1[], Car array2[]);
-bool aStar(Node *node);
+bool aStar(Node *node, int type);
 Node* initState(Node* state,int lvl, int heur, int cost, int id, int x, int y);
 void push(Node *pointer);//, int data);
-Node* pop();
+Node* pop(void);
 void printQ();
 Node* makeNewNode(Car carArray[], Node *parent, int carMoved, char moveDir, int type);
 bool configExists(Car carArray[]);
@@ -100,3 +102,4 @@ void insert(Node *node);
 bool BFS(Node *node);
 Node* makeRoot(Car carArray[]);
 void BFStree(Car carArray[]);
+void aStarTree(int type);
