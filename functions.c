@@ -238,6 +238,10 @@ void printOutput(int carMoved, char moveDir, Node *parent){
   temp->next = NULL;
   S_top = temp; 
 
+  prevCarMoved = carMoved;
+  prevMoveDir = moveDir;
+  moveCtr = 1;
+
   tempNode = parent;
   while(tempNode->parent != NULL){
     temp = (Stack*)malloc(sizeof(Stack));
@@ -246,12 +250,25 @@ void printOutput(int carMoved, char moveDir, Node *parent){
     temp->next = S_top;
     S_top = temp;
 
+    if(temp->carMoved == prevCarMoved && temp->moveDir == prevMoveDir);
+    else{
+      prevCarMoved = temp->carMoved;
+      prevMoveDir = temp->moveDir;
+      moveCtr++;
+    }
+
     tempNode = tempNode->parent; 
     i++;
   }
   printf("\n\n\nFinished creating stack length %d. Printing stack.\n\n", i);
 
   /* Print Stack */
+  printf("%d\n", moveCtr);
+  fprintf(out, "%d\n", moveCtr);
+  prevCarMoved = -1;
+  prevMoveDir = ' ';
+  moveCtr = 0;
+  i = 0;
   while(S_top != NULL){
     if(prevCarMoved == S_top->carMoved && prevMoveDir == S_top->moveDir){
       moveCtr++;
@@ -276,7 +293,7 @@ void printOutput(int carMoved, char moveDir, Node *parent){
     free(temp);
   }
 
-  printf("%d %c %d", prevCarMoved, prevMoveDir, moveCtr);
+  printf("%d %c %d\n", prevCarMoved, prevMoveDir, moveCtr);
   fprintf(out, "%d %c %d\n", prevCarMoved, prevMoveDir, moveCtr);
 }
 
