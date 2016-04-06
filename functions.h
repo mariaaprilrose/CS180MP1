@@ -85,6 +85,6 @@ void printQ();
 Node* makeNewNode(Car carArray[], Node *parent, int type);
 bool configExists(Car carArray[]);
 void insert(Node *node);
-void BFS();
+bool BFS(Node *node);
 Node* makeRoot(Car carArray[]);
 void BFStree(Car carArray[]);

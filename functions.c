@@ -580,19 +580,25 @@ void moveRight(Car carArray[], int index){//struct
   
 }
 
-void BFS(Node *currNode){// make queue
+bool BFS(Node *currNode){// make queue
   int i,j;
   Node *newNode;
-
-
-  if(currNode!=NULL){
+  if(currNode==NULL)
+    printf("+***+ Current node is NULL so no more node to BFS\n");
+  else{
     for(i=0;i<numberOfCars;i++){//check allprintf allowed moves per car (U/D,L/R)
       printf("+++++++++++++++++++++Checking allowed moves for Car %d+++++++++++++++++++++\n",currNode->carArray[i].id);
       if(currNode->carArray[i].orientation==118){
+         
          if(CarUp(currNode->carArray,i)==1){//if UP move valid
           cars = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
           CopyCar(currNode->carArray, cars);
           moveUp(cars,i);
+
+          if(isGoalState(cars[0])){
+            printf("Reached goal state\n");
+            return true;
+          }
           if(configExists(cars)==false){
             newNode=makeNewNode(cars, currNode,1);
             push(newNode);
@@ -602,6 +608,12 @@ void BFS(Node *currNode){// make queue
           cars = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
           CopyCar(currNode->carArray, cars);
           moveDown(cars,i);
+
+          if(isGoalState(cars[0])){
+            printf("Reached goal state\n");
+            return true;
+          }
+
           if(configExists(cars)==false){
             newNode=makeNewNode(cars, currNode,1);
             push(newNode);
@@ -613,6 +625,12 @@ void BFS(Node *currNode){// make queue
           cars = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
           CopyCar(currNode->carArray, cars);
           moveLeft(cars,i);
+
+          if(isGoalState(cars[0])){
+            printf("Reached goal state\n");
+            return true;
+          }
+
           if(configExists(cars)==false){
             newNode=makeNewNode(cars, currNode,1);
             push(newNode);
@@ -623,18 +641,22 @@ void BFS(Node *currNode){// make queue
           cars = malloc(numberOfCars*sizeof(Car));//make carArray holder/temp
           CopyCar(currNode->carArray, cars);
           moveRight(cars,i);
+
+          if(isGoalState(cars[0])){
+            printf("Reached goal state\n");
+            return true;
+          }
+
           if(configExists(cars)==false){
             newNode=makeNewNode(cars, currNode,1);
             push(newNode);
           }
         }
       }
-      
-
     }
   }
-  else if(currNode==NULL)
-    printf("+***+ Current node is NULL so no more node to BFS\n");
+
+  return false;
 }
 
 //Make sure Queue* global vars are set to NULL before first call of aStar
@@ -751,7 +773,7 @@ Node* makeRoot(Car carArray[]){
 }
 
 void BFStree(Car carArray[]){
-  int i;
+  /*int i;
   //BFS(pop());
   //printf("mainCar's coordinates (%d,%d)\n",head)
 
@@ -768,7 +790,26 @@ void BFStree(Car carArray[]){
     temp = pop();
     BFS(temp);
     printf("MainCar (%d,%d)\n",temp->carArray[0].coor.x,temp->carArray[0].coor.y);
+  }*/
+
+  Node *node;
+  bool goalReached;
+  node = pop();
+  while(node != NULL && goalReached == false){
+    printf("Node explored @ level %d\n", node->level);
+    printf("Heuristic: %d\n", node->currHeuristic);
+    printf("Cost: %d\n", node->currCost);
+    printf("Red car @ (%d, %d)\n", node->carArray[0].coor.x, node->carArray[0].coor.y);
+    printf("\n");
+    goalReached = BFS(node);
+    printf("\n\n\n");
+    if(goalReached == false) node = pop();
   }
+  if(goalReached == true){
+    printf("Goal reached @ level %d\n", (node->level+1));
+    return;
+  }
+  if(node == NULL) printf("No solution reached.\n");
   
 }
 
