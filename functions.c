@@ -78,14 +78,18 @@ int blockHeuristic(Car carArray []){
   for(i = 1; i < numberOfCars; i++){
     if(carArray[i].orientation == carArray[0].orientation){ // might never happen
       if(carArray[i].orientation == 'h'){
-        if(goalX > carArray[i].coor.x) carsBlocking++;
+        if((goalX > carArray[i].coor.x) && (carArray[i].coor.y == goalY) && (carArray[i].coor.x > carArray[0].coor.x)){
+          carsBlocking++;
+        }
       }
       else{
-        if(goalY > carArray[i].coor.y) carsBlocking++;
+        if(goalY > carArray[i].coor.y && carArray[i].coor.x == goalX && carArray[i].coor.y > carArray[0].coor.y){
+          carsBlocking++;
+        }
       }
     }
     else{
-      if(carArray[i].orientation == 'v'){ // vertical yung goal car
+      if(carArray[i].orientation == 'h'){ // vertical yung goal car
         if((carArray[0].coor.y + carArray[0].length - 1) < carArray[i].coor.x){ // kung nasa baba ng goal car yung ith car
           if(carArray[i].coor.x <= goalX && (carArray[i].coor.x + carArray[i].length - 1) >= goalX){
             carsBlocking++;
@@ -547,7 +551,6 @@ void CopyCar(Car array1[], Car array2[]){
     //printf("ID: %d\n", array1[i].id);
     //array2[i]=(Car*)malloc(sizeof(Car));
     array2[i]= array1[i];
-    printf("%d\n", i);
   }
 }
 
@@ -824,6 +827,9 @@ bool aStar(Node *currNode,int type){
     //printf("+***+ Current node is NULL so no more node for A*\n");
   }  
   else{
+    /*for(j = 0; j <numberOfCars; j++){
+      printf("car %d at (%d, %d)\n", j, currNode->carArray[j].coor.x, currNode->carArray[j].coor.y);
+    }*/
     for(i=0;i<numberOfCars;i++){//check allprintf allowed moves per car (U/D,L/R)
       /*printf("+++++++++++++++++++++Checking allowed moves for Car %d+++++++++++++++++++++\n",currNode->carArray[i].id);
       printf("FOR CAR %d:\n", i);
